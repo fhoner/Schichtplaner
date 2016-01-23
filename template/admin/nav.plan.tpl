@@ -1,0 +1,1 @@
+<li class="${active}$ nav-plan"><a href="${${url}$}$/admin/index.php?v=plan&amp;p=${name}$" class="nav-plan">${name}$</a></li>
