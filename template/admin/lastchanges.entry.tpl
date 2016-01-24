@@ -3,5 +3,5 @@
     <td>${shift}$</td>
     <td>${user}$</td>
     <td>${email}$</td>
-    <td>${date}$</td>
+    <td class="${hidden}$">${date}$</td>
 </tr>

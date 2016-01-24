@@ -11,8 +11,8 @@
                 <tr>
                     <th>Name</th>
                     <th>Schichten</th>
-                    <th>Benötigte Helfer</th>
                     <th>Fehlende Helfer</th>
+                    <th>Benötigte Helfer</th>
                 </tr>
             </thead>
             <tbody>

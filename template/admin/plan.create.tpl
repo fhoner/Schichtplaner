@@ -31,32 +31,4 @@
         </div>
     </div>
 </div>
-<script>
-    $('.datepicker').datepicker({
-        format: 'dd.mm.yyyy'
-    });
-    
-    function create(){        
-        $.ajax({
-            url: "ajax.createPlan.php",
-            method: "POST",
-            data: {
-                "name": $("#name").val(),
-                "public": $("#public-to").val(),
-                "editable": $("#edit-to").val()
-            },
-            success: function(result) {
-                if (result.substring(0, 7) == "SUCCESS") {
-                    result = result.substr(7, result.length - 7); 
-                    $("#name").val("");
-                    $("#public-to").val("");
-                    $("#edit-to").val("");
-                    $("#nav-plans").prepend(result);
-                    show("Plan erstellt", "Der Plan wurde erfolgreich angelegt.");
-                }
-                else
-                    show("Fehler", result);
-            }
-        })
-    }
-</script>
+<script src="${${root}$}$js/admin.plan.js"></script>

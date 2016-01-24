@@ -258,19 +258,26 @@ abstract class emailSettings
         }
         
         if(emailSettings::$method == emailSendMethod::MAIL)
-        {
-            $header = "";
-
-            // create header
-            $header .= 'MIME-Version: 1.0' . "\r\n";
-            $header .= 'Content-type: text/html; charset=UTF-8' . "\r\n";
-            $header .= "From: " . ORGANISATION . "<" . emailSettings::$sender . ">\r\n";
-            $header .= "Reply-To: " . ORGANISATION . " <" . emailSettings::$sender . ">";
-            
+        {            
             if(is_array($recipients))
             {
-                foreach($recipients as $rec)
+                foreach($recipients as $rec) 
+                {
+                    // create header
+                    $header = "";
+                    $header .= 'MIME-Version: 1.0' . "\r\n";
+                    $header .= 'Content-type: text/html; charset=UTF-8' . "\r\n";      
+                    $header .= "From: " . ORGANISATION . "<" . emailSettings::$sender . ">\r\n";
+                    $header .= "Reply-To: " . ORGANISATION . " <" . emailSettings::$sender . ">\r\n";
+                    
+                    // check if $rec is associative array
+                    /*if(is_array($rec) && array_keys($rec) !== range(0, count($rec) - 1))
+                        $header .= "To: " . $rec['name'] . "<" . $rec['address'] . ">\r\n";
+                    else
+                        $header .= "To: " . $rec . "\r\n";*/
+            
                     mail($rec, $subject, $body, $header);
+                }
             }
             else
                 mail($recipients, $subject, $body, $header);

@@ -17,8 +17,8 @@ if(!isset($_POST['public']) || !validateDate($_POST['public'])
 
 dbConn::execute("UPDATE :prefix:plan SET name = :0, public = :1, editable = :2 WHERE name = :3",
                 htmlspecialchars($_POST['name']),
-                $_POST['public'],
-                $_POST['editable'],
+                DateTime::createFromFormat("d.m.Y", $_POST['public'])->format("Y-m-d H:i:s"),
+                DateTime::createFromFormat("d.m.Y", $_POST['editable'])->format("Y-m-d H:i:s"),
                 htmlspecialchars($_POST['originalName'])
                );
                

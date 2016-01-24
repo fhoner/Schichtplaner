@@ -29,13 +29,17 @@ table {
  th {
     padding:10px !important;
  }
+ .hidden {
+    display: none;
+}
 </style>
 
 </head>
  
 <body>
     <div style="width:100%; padding:0px;">
-    <h3>Änderungen am Schichtplan <strong>${plan}$</strong></h3>
+    <h3>Änderungen am Schichtplan</h3>
+    Es wurden Änderungen am Schichtplan für <strong>${plan}$</strong> vorgenommen.<br />
     <div style="width:100%; text-align:right;"><a href="${${url}$}$" target="_blank">Schichtplan aufrufen</a></div>
     <br /><br />
     <table class="table table-striped" style="margin:25px;">
@@ -45,7 +49,6 @@ table {
                 <th>Schicht</th>
                 <th>Name</th>
                 <th>E-Mail</th>
-                <th>Datum</th>
             </tr>
         </thead>
         <tbody>

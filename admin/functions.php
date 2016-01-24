@@ -27,13 +27,19 @@ function getHistory($limit)
         switch($r['action'])
         {
             case "insert":
-                $change->insert("action", "<small><i class=\"fa fa-plus-square\"></i></small>  Hinzugefügt");
+                $change->insert("action", "<span style=\"color:green;\"><small>
+                                            <i class=\"fa fa-plus-square\"></i>
+                                           </small></span>&nbsp;&nbsp;Hinzugefügt");
                 break;
             case "update":
-                $change->insert("action", "<small><i class=\"fa fa-minus-square\"></i></small>  Bearbeitet");
+                $change->insert("action", "<span style=\"color:orange;\"><small>
+                                            <i class=\"fa fa-minus-square\"></i>
+                                           </small></span>&nbsp;&nbsp;Bearbeitet");
                 break;
             case "delete":
-                $change->insert("action", "<small><i class=\"fa fa-trash\"></i></small>  Gelöscht");
+                $change->insert("action", "<span style=\"color:red;\">
+                                            <small><i class=\"fa fa-trash\"></i>
+                                           </small></span>&nbsp;&nbsp;Gelöscht");
                 break;
             default:
                 $change->insert("action", "Unbekannt");

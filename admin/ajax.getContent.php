@@ -38,7 +38,7 @@ switch($_POST['v'])
                  FROM :prefix:shift
                  INNER JOIN :prefix:worker
                  ON :prefix:worker.shift = :prefix:shift.shiftId
-                 WHERE plan = :0", $r['name']);
+                 WHERE :prefix:shift.plan = :0", $r['name']);
             $plan->insert("missingWorkers", $missingWorkers);
             
             $plans->insert("content", $plan->getOutput());
@@ -120,6 +120,37 @@ switch($_POST['v'])
         
     case "newplan":
         $tpl = new template("admin/plan.create");
+        echo $tpl->getOutput();
+        break;
+        
+    case "email":
+        $tpl = new template("admin/mail.container");
+        foreach(dbConn::query("SELECT * FROM :prefix:plan ORDER BY created DESC") as $r)
+        {
+            $tpl->insert("plans", template::create("admin/mail.plan", array("name" => $r['name'])));
+        }
+        
+        foreach(dbConn::query("SELECT DISTINCT name, email FROM :prefix:worker ORDER BY name ASC") as $r)
+        {
+            $rec = new template("admin/mail.recipient");
+            $rec->insert("name", $r['name']);
+            $rec->insert("address", $r['email']);
+            
+            foreach(dbConn::query("SELECT DISTINCT name FROM :prefix:plan",
+                                    $r['name'],
+                                    $r['email']) as $s)
+                $rec->insert("plans", template::create("admin/mail.recipient.plan", array(
+                    "name" => $s['name'],
+                    "checked" => dbConn::querySingle("SELECT COUNT(*) FROM :prefix:worker 
+                                                      WHERE name = :0 AND email = :1 AND plan = :2",
+                                                        $r['name'],
+                                                        $r['email'],
+                                                        $s['name']) > 0 ? "checked" : ""
+                )));
+                
+            $tpl->insert("recipients", $rec);
+        }
+        $tpl->removeVariables();
         echo $tpl->getOutput();
         break;
         

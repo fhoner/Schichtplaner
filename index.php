@@ -7,9 +7,11 @@ $count = 0;
 $first = true;
 $tpl = new template("index");
 
-foreach(dbConn::query("SELECT * FROM :prefix:plan WHERE deleted = 0 ORDER BY created DESC") as $pl)
+foreach(dbConn::query("SELECT *, IF(editable > CURRENT_TIMESTAMP, 1, 0) AS editable FROM :prefix:plan 
+                       WHERE deleted = 0 AND public > CURRENT_TIMESTAMP ORDER BY created DESC") as $pl)
 {
-    $plan = $pl['name'];
+    $plan = $pl['name'];    
+    $isReadonly = !$pl['editable'];
     $shifts = groupShifts($plan);
 
     $tab = new template("plan.tab");
@@ -20,12 +22,14 @@ foreach(dbConn::query("SELECT * FROM :prefix:plan WHERE deleted = 0 ORDER BY cre
     $tabContent = new template("plan.content");
     $tabContent->insert("active", $first ? "active" : "");
     $tabContent->insert("name", $plan);
+    $tabContent->insert("hidden", $isReadonly ? "" : "hidden");
 
     $first = false;
     $colSum = 0;
     foreach($shifts as $index => $values)
     {
         $planTpl = new template("plan.table");
+        $planTpl->insert("readonly", $isReadonly ?  "plan-readonly" : "");
         $tblCount = count($values['productions']);
         $colSize = round(12 / getRowSize($shifts, $values['row']) * $values['size']);
         

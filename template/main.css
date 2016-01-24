@@ -1,0 +1,77 @@
+html {
+    position: relative;
+    min-height: 100%;
+}
+body {
+    margin-top:25px;
+    margin-bottom: 80px;
+}
+table.table-shifts {
+    table-layout: fixed;
+    border-left:4px solid #dddddd !important;
+}
+.short {
+    width:60px;
+}
+th {
+    cursor: auto !important;
+}
+td.td-time {
+    text-align: center;
+    vertical-align: middle !important;
+}
+td.td-user {
+    cursor: pointer;
+    position:relative;
+}
+.td-user-max {
+    position: absolute; 
+    bottom:2px; 
+    right:2px; 
+    font-size:10px; 
+    color:silver;
+}
+.td-user .user-email {
+    display: none;
+}
+.td-disabled {
+    background-color: #eee;
+}
+.delete-user {
+    width:20px;
+    text-align: center;
+}
+.tr-debug {
+    display:none;
+}
+.form-control {
+    margin-top:5px;
+    margin-bottom:15px;
+}
+.shift-disabled {
+    cursor: not-allowed !important;
+}
+#save-loading {
+    display:none;
+    width: 15px;
+    margin-left:3px;
+    margin-right:3px;
+}
+.footer {
+    position: absolute;
+    bottom: 0;
+    width: 100%;
+    /* Set the fixed height of the footer here */
+    height: 60px;
+    background-color: #f5f5f5;
+}
+body > .container {
+    padding: 60px 15px 0;
+}
+.container .text-muted {
+    margin: 20px 0;
+}
+.footer > .container {
+    padding-right: 15px;
+    padding-left: 15px;
+}

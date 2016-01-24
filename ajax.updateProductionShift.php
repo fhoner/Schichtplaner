@@ -49,6 +49,43 @@ require("transaction.php");
 */
 
 $d = $_POST['data'];
+$errors = array();
+
+// validation checks
+if(isset($d['workers']))
+    foreach($d['workers'] as $worker)
+    {
+        $nameRegex = "/^[A-Z][-a-zA-Z]+$/";
+        if(trim($worker['name']) == ""
+            || preg_match($nameRegex, $worker['name']))
+            $errors[] = "Der Name <strong>$worker[name]</strong> ist ungültig.";
+        
+        $temp = str_replace("ö", "oe", $worker['email']);
+        $temp = str_replace("Ö", "Oe", $temp);
+        $temp = str_replace("ä", "ae", $temp);
+        $temp = str_replace("Ä", "Ae", $temp);
+        $temp = str_replace("ü", "ue", $temp);
+        $temp = str_replace("Ü", "Ue", $temp);
+        
+        if (!filter_var($temp, FILTER_VALIDATE_EMAIL)) 
+            $errors[] = "Die E-Mail Adresse <strong>$worker[email]</strong> ist ungültig.";
+    }
+
+if(count($errors) > 0) 
+{
+    echo "<ul>";
+    foreach($errors as $err)
+        echo "<li>$err</li>";
+    die();
+}
+
+if(dbConn::querySingle("SELECT COUNT(*) FROM :prefix:plan WHERE 
+                            name = :0
+                            public < CURRENT_TIMESTAMP OR 
+                            editable < CURRENT_TIMESTAMP", $_POST['plan']) > 1)
+{
+    die("REFRESH");
+}
 
 try
 {
@@ -93,12 +130,12 @@ try
                                                                     AND shift = :3
                                                                     AND name = :4
                                                                     AND email = :5", 
-                                                                $val['name'],
-                                                                $val['email'],
+                                                                htmlspecialchars($val['name']),
+                                                                htmlspecialchars($val['email']),
                                                                 $d['production'], 
                                                                 $d['shiftId'],
-                                                                $arr[0],
-                                                                $arr[1]
+                                                                htmlspecialchars($arr[0]),
+                                                                htmlspecialchars($arr[1])
                                                                 );
             }
             else
@@ -170,7 +207,7 @@ try
                 $change->insert("email", "<small><span style=\"text-decoration:line-through;\">$r[emailBefore]</span></small>
                 <br /><strong>$r[emailAfter]</strong>");
 
-            $change->insert("date", (new DateTime($r['created']))->format("d.m.y H:i"));
+            $change->insert("hidden", "hidden");
             $email->insert("content", $change->getOutput());
             
             dbConn::execute("DELETE FROM :prefix:email_pending WHERE historyId = :0", $r['historyId']);
@@ -184,7 +221,7 @@ try
         foreach(dbConn::query("SELECT email FROM :prefix:email_subscriber 
                                         WHERE plan = :0", $_POST['plan']) as $r)
             $arr[] = $r['email'];
-        if(count($arr) > 0)
+        if(count($arr) > 0 && trim($arr[0]) != "")
         {
             emailSettings::send($arr, 
                                 "Änderungen am Schichtplan " . $_POST['plan'], 

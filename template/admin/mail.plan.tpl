@@ -1,0 +1,1 @@
+<input type="checkbox" class="plan-check" id="chbx-${name}$" value="${name}$">&nbsp;${name}$<br />
