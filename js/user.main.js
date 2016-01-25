@@ -67,15 +67,20 @@ function updateCells(){
 }
     
 function levelRows(){
-    var maxHeight = 0;
     $("table tbody tr").css("height", "auto");
-    $("table tbody tr").each(function(){
-        if($(this).height() > maxHeight)
-            maxHeight = $(this).height();
+    
+    $("table").each(function() {
+        var maxHeight = 0;
+        $(this).find("tbody").find("tr").each(function(){
+            if($(this).height() > maxHeight)
+                maxHeight = $(this).height();
+        });
+        $(this).find("tbody").find("tr").each(function(){
+            $(this).css("height", maxHeight + "px");
+        }); 
     });
-    $("table tbody tr").each(function(){
-        $(this).css("height", maxHeight + "px");
-    });            
+    
+               
 }
     
 $(function(){
@@ -150,6 +155,9 @@ $(document).ready(function(){
 
     $("#save-shift").click(function(){
         
+        /*
+         * Check for unadded user and ask to discard or go back
+         */
         if($("#add-name").val().trim() != "" || $("#add-email").val().trim() != "") {
             
             $("#editEntry").modal("hide");
@@ -182,6 +190,9 @@ $(document).ready(function(){
             return;
         }
 
+        /*
+         * save changes now and update the td cell
+         */
         $("#save-loading").show();
         $("#editEntry input").prop("disabled", true);
         $("#editEntry button").prop("disabled", true);
@@ -228,9 +239,13 @@ $(document).ready(function(){
                                         "</div></div>";
                         });
                         
-                        // update cell html
-                        $(editObject).find(".worker").remove();
-                        $(editObject).html($(editObject).html() + tdhtml);
+                        // update cell html both in desktop and mobile section                    
+                        $("td").each(function() {
+                            if($(this).data("unique") == $(editObject).data("unique")) {
+                                $(this).find(".worker").remove();
+                                $(this).html($(this).html() + tdhtml);                                    
+                            }
+                        });                                                
                         
                         $("#editEntry").modal("hide");
                         updateCells();

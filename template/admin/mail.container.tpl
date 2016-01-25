@@ -4,9 +4,11 @@
     </div>
     <div class="panel-body">
         <div class="alert alert-info" role="alert">
-            <strong>Info: </strong> Es ist (noch) nicht möglich, über diese webanwendung eine Rundmail zu verschicken. 
+            <strong>Info: </strong> Es ist nicht möglich, über diese Webanwendung eine Rundmail zu verschicken. 
             Daher wird empfohlen, die generierte Empfängerliste am unteren Ende dieser Ansicht in die Adresszeile
-            ihres Mail-Clients zu kopieren.
+            ihres Mail-Clients zu kopieren.<br>
+            Tipp: Nutzen Sie das BCC-Feld, um den Empfängern nicht die 
+            Adressliste bekanntzugeben.
         </div>
         Wählen Sie die Empfänger der Rundmail. Es besteht die Möglichkeit, 
         eine Auswahl von Benutzern nach Plänen zu setzen.<br><br>

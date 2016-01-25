@@ -5,7 +5,7 @@
     	<meta charset="utf-8">
     	<script src="${${root}$}$sources/jquery/jquery-1.11.1.min.js" type="text/javascript"></script>
 		<link rel="stylesheet" href="${${root}$}$sources/bootstrap/bootstrap.min.css" crossorigin="anonymous">
-		<link rel="stylesheet" href="${${root}$}$sources/bootstrap/bootstrap-theme.min.css" crossorigin="anonymous">
+		<link rel="stylesheet" href="${${root}$}$sources/bootstrap/bootstrap.simplex.min.css" crossorigin="anonymous">
 		<link rel="stylesheet" href="${${root}$}$sources/datepicker/css/datepicker.css" crossorigin="anonymous">
 		<script src="${${root}$}$sources/bootstrap/bootstrap.min.js" crossorigin="anonymous"></script>
 	    <script src="${${root}$}$sources/bootstrap/bootbox.js"></script>

@@ -1,7 +1,9 @@
 <!DOCTYPE html>
 <html>
     <head>
+        <title>Schichtplan ${organisation}$</title>
         <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <script src="sources/jquery/jquery-1.11.1.min.js" type="text/javascript"></script>
         <link rel="stylesheet" href="sources/bootstrap/bootstrap.min.css" crossorigin="anonymous">
         <link rel="stylesheet" href="sources/bootstrap/bootstrap-theme.min.css" crossorigin="anonymous">
@@ -27,7 +29,7 @@
                         <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                             <span aria-hidden="true">&times;</span>
                         </button>
-                        <h4 class="modal-title"></h4>
+                        <h4 class="modal-title">{empty}</h4>
                     </div>
                     <div class="modal-body">
                         <strong>Hinweis: </strong>Durch Klicken in eine Zelle kann der jeweilige Eintrag bearbeitet werden.<br><br>
@@ -62,7 +64,7 @@
                     <div class="modal-footer">
                         <button type="button" class="btn btn-default" data-dismiss="modal">Abbrechen</button>
                         <button type="button" class="btn btn-primary" id="save-shift">
-                            <img src="template/loading.gif" id="save-loading" />
+                            <img src="template/loading.gif" alt="loading-animation" id="save-loading" />
                             <i class="fa fa-floppy-o"></i>&nbsp;Speichern
                         </button>
                     </div>
@@ -78,3 +80,4 @@
         <script src="js/user.main.js"></script>
     </body>
 </html>
+<!-- page creation duration was ${creationTime}$ms --> 

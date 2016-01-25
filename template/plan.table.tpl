@@ -3,12 +3,11 @@
         <table class="table table-striped table-bordered table-shifts ${readonly}$">
             <thead>
                 <tr style="height:70px;">
-                    <th></th>
+                    <th style="width:60px;"></th>
                     ${productions}$
                 </tr>
             </thead>
             <tbody>
-                <col span="1" class="short">
                 ${shifts}$
             </tbody>
         </table>

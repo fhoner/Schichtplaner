@@ -135,11 +135,12 @@ function groupShifts($plan)
         }
         
         if(!isset($shifts[$key]['row']))
-            $shifts[$key]['row'] = $rowCount;
-        $shifts[$key]['size'] = $counter;
+            $shifts[$key]['row'] = $rowCount;            
+            
+        $shifts[$key]['size'] = count($shifts[$key]['productions']);
     }
     
-    //die("<pre>" . json_encode($shifts, JSON_PRETTY_PRINT) . "</pre>");
+    //echo("<pre>" . json_encode($shifts, JSON_PRETTY_PRINT) . "</pre>");
     
     return $shifts;
 }
@@ -153,6 +154,18 @@ function getRowSize($arr, $rowIndex)
             $size += $value['size'];
     }
     return $size;
+}
+
+function seoUrl($string) {    
+    // Make alphanumeric (removes all other characters)
+    $string = preg_replace("/[^a-zA-Z0-9_\s-]/", "", $string);
+    
+    //Clean up multiple dashes or whitespaces
+    $string = preg_replace("/[\s-]+/", " ", $string);
+    
+    //Convert whitespaces and underscore to dash
+    $string = preg_replace("/[\s_]/", "-", $string);
+    return $string;
 }
 
 ?>

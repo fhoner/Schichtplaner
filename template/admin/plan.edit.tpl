@@ -171,3 +171,8 @@
 </div>
 <script src="${${root}$}$js/admin.plan.js"></script>
 <script src="${${root}$}$sources/bootstrapformhelpers/js/bootstrap-formhelpers.js"></script>
+<script>
+$(".datepicker").datepicker({
+    format: "dd.mm.yyyy" 
+});
+</script>
