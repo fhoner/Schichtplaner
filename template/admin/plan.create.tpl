@@ -31,4 +31,6 @@
         </div>
     </div>
 </div>
-<script src="${${root}$}$js/admin.plan.js"></script>
+<script>
+    initPlans();
+</script>

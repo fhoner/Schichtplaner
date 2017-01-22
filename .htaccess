@@ -7,4 +7,3 @@ RewriteEngine On
 RewriteBase /planer/
 
 DirectoryIndex index.php
-RewriteRule ^js/(.*)\.js$ 			js/jsminify.php?filename=js/$1 [L]

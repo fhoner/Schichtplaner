@@ -51,5 +51,4 @@
         </table>        
     </div>
 </div>
-<script src="${${root}$}$js/admin.mail.js"></script>
-   
+<script>addMailHandlers();</script>   

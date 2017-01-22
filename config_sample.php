@@ -19,7 +19,7 @@ dbConn::setHost("localhost");
 dbConn::setDatabase("schichtplaner");
 dbConn::setUsername("root");
 dbConn::setPassword("root");
-dbConn::setTablePrefix("mvoe_");
+dbConn::setTablePrefix("prefix_");
 template::setDoIndent(true);
 
 require_once("emailSettings.php");

@@ -3,18 +3,8 @@
     <head>
         <title>Schichtplaner Admin</title>
     	<meta charset="utf-8">
-    	<script src="${${root}$}$sources/jquery/jquery-1.11.1.min.js" type="text/javascript"></script>
-		<link rel="stylesheet" href="${${root}$}$sources/bootstrap/bootstrap.min.css" crossorigin="anonymous">
-		<link rel="stylesheet" href="${${root}$}$sources/bootstrap/bootstrap.simplex.min.css" crossorigin="anonymous">
-		<link rel="stylesheet" href="${${root}$}$sources/datepicker/css/datepicker.css" crossorigin="anonymous">
-		<script src="${${root}$}$sources/bootstrap/bootstrap.min.js" crossorigin="anonymous"></script>
-	    <script src="${${root}$}$sources/bootstrap/bootbox.js"></script>
-	    <script src="${${root}$}$sources/bootstrap/mindmup-editabletable.js"></script>
-	    <script src="${${root}$}$sources/datepicker/js/bootstrap-datepicker.js"></script>
-        <script src="${${root}$}$sources/bootstrap/mindmup-editabletable.js"></script>
-        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.5.0/css/font-awesome.min.css">
-        <link rel="stylesheet" href="${${root}$}$sources/bootstrapformhelpers/css/bootstrap-formhelpers.min.css" crossorigin="anonymous">
-        <link rel="stylesheet" href="${${root}$}$template/admin/main.css" crossorigin="anonymous">
+    	<script src="${${root}$}$dist/js/schichtplaner.admin.js" type="text/javascript"></script>
+		<link rel="stylesheet" href="${${root}$}$dist/css/schichtplaner.admin.css">
         <script>
             root = "${${root}$}$";
         </script>
@@ -70,12 +60,10 @@
         <div class="row">
             <div class="col-md-1"></div>
             <div class="col-md-10" id="content">                
-                <div id="loading"><img src="${${root}$}$template/loading.gif" alt="loading" /></div>
-                
+                <div id="loading"><img src="${${root}$}$template/loading.gif" alt="loading" /></div>                
             </div>
             <div class="col-md-1"></div>
         </div>    
     </div>
-    <script src="${${root}$}$js/admin.main.js"></script>
     </body>
 </html>

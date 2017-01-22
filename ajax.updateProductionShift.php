@@ -10,6 +10,7 @@ require("transaction.php");
     Array
     (
         [plan] => 'Donnerstag'
+        [shiftId] => 3
         [data] => Array
             (
                  [deleted] => Array
@@ -21,7 +22,6 @@ require("transaction.php");
                             )
 
                     )
-                [shiftId] => 3
                 [production] => Grill
                 [workers] => Array
                     (
@@ -29,6 +29,7 @@ require("transaction.php");
                             (
                                 [name] => Felix Honer
                                 [email] => privat@feix-honer.com
+                                [isFixed] => true
                                 [action] => update
                                 [uid] => Felix Honer\nprivat@felix-honer.com
                             )
@@ -37,6 +38,7 @@ require("transaction.php");
                             (
                                 [name] => Wolfgang Bergler
                                 [email] => w.bergler@web.de
+                                [isFixed] => false
                                 [action] => create
                                 [uid] => Wolfgang Bergler\nw.bergler@web.de
                             )
@@ -50,6 +52,7 @@ require("transaction.php");
 
 $d = $_POST['data'];
 $errors = array();
+//$errors[] = json_encode($_POST);
 
 // validation checks
 if(isset($d['workers']))
@@ -67,15 +70,21 @@ if(isset($d['workers']))
         $temp = str_replace("ü", "ue", $temp);
         $temp = str_replace("Ü", "Ue", $temp);
         
-        if (!filter_var($temp, FILTER_VALIDATE_EMAIL)) 
-            $errors[] = "Die E-Mail Adresse <strong>$worker[email]</strong> ist ungültig.";
+        //if (!filter_var($temp, FILTER_VALIDATE_EMAIL)) 
+        //    $errors[] = "Die E-Mail Adresse <strong>$worker[email]</strong> ist ungültig.";
     }
 
 if(count($errors) > 0) 
 {
-    echo "<ul>";
+    $err = "";
+    $err .= "<ul>";
     foreach($errors as $err)
-        echo "<li>$err</li>";
+        $err .= "<li>$err</li>";
+    $err .= "</ul>";
+    echo json_encode(array(
+        "result" => "error",
+        "message" => $err 
+    ));
     die();
 }
 
@@ -115,17 +124,18 @@ try
         {
             if($val['action'] == "create")
             {
-                $t->addStatement("INSERT INTO :prefix:worker (name, email, production, plan, shift) VALUES (:0, :1, :2, :3, :4);",
+                $t->addStatement("INSERT INTO :prefix:worker (name, email, production, plan, shift, isFixed) VALUES (:0, :1, :2, :3, :4, :5);",
                                     htmlspecialchars($val['name']),
                                     htmlspecialchars($val['email']),
                                     $d['production'],
                                     $_POST['plan'],
-                                    (int)$d['shiftId']);
+                                    (int)$d['shiftId'],
+                                    $val['isFixed'] == "true");
             }
             else if($val['action'] == "update")
             {
                 $arr = explode("\n", $val['uid']);
-                $t->addStatement("UPDATE :prefix:worker SET name = :0, email = :1 
+                $t->addStatement("UPDATE :prefix:worker SET name = :0, email = :1, isFixed = :6
                                                             WHERE production = :2 
                                                                     AND shift = :3
                                                                     AND name = :4
@@ -135,7 +145,8 @@ try
                                                                 $d['production'], 
                                                                 $d['shiftId'],
                                                                 htmlspecialchars($arr[0]),
-                                                                htmlspecialchars($arr[1])
+                                                                htmlspecialchars($arr[1]),
+                                                                $val['isFixed'] == "true"
                                                                 );
             }
             else
@@ -158,7 +169,7 @@ try
     $email = new template("email");
     $email->insert("plan", $_POST['plan']);
     foreach(dbConn::query("SELECT * FROM :prefix:email_pending") as $r)
-    {
+    {        
         $emailRequired = true;
         foreach(dbConn::query("SELECT
                                 historyId,
@@ -167,11 +178,13 @@ try
                                 nameAfter, 
                                 emailBefore, 
                                 emailAfter, 
+                                isFixedBefore,
+                                isFixedAfter,
                                 production, 
                                 fromDate,
                                 toDate,
-                                mvoe_plan.name AS plan, 
-                                mvoe_worker_history.created
+                                :prefix:plan.name AS plan, 
+                                :prefix:worker_history.created
                             FROM :prefix:worker_history 
                             INNER JOIN :prefix:shift ON :prefix:shift.shiftId = :prefix:worker_history.shift
                             INNER JOIN :prefix:plan ON :prefix:shift.plan = :prefix:plan.name
@@ -196,11 +209,18 @@ try
             }
             $change->insert("shift", "<small>$r[plan], $r[production]</small><br />" .
                                     substr($r['fromDate'], 0, 5) . " - " . substr($r['toDate'], 0, 5));
-            if($r['nameBefore'] == $r['nameAfter'])
+            if($r['nameBefore'] == $r['nameAfter']
+                    && $r['isFixedBefore'] == $r['isFixedAfter'])
                 $change->insert("user", $r['nameAfter']);
             else
-                $change->insert("user", "<small><span style=\"text-decoration:line-through;\">$r[nameBefore]</span></small>
-                <br /><strong>$r[nameAfter]</strong>");
+            {
+                $change->insert("user", "<small><span style=\"text-decoration:line-through;\">$r[nameBefore] " .
+                    ($r['isFixedBefore'] ? " [fix]" : " [vorläufig]") .
+                    "</span></small>
+                <br /><strong>$r[nameAfter] " .
+                    ($r['isFixedAfter'] ? " [fix]" : " [vorläufig]") . 
+                "</strong>");
+            }
             if($r['emailBefore'] == $r['emailAfter'])
                 $change->insert("email", $r['emailAfter']);
             else
@@ -233,11 +253,30 @@ try
     }
         
     
-    echo "SUCCESS";
+    // create html output and send to client
+    $html = "";
+    foreach(dbConn::query("SELECT * FROM :prefix:worker WHERE production = :0 AND shift = :1 ORDER BY name ASC", 
+        $d['production'], $d['shiftId']) as $r)
+    {
+        $worker = new template("worker");
+        $worker->insert("fixed", $r['isFixed'] ? "" : "not-fixed");
+        $worker->insert("name", $r['name']);
+        $worker->insert("email", $r['email']);
+        $html .= $worker->getOutput();
+    }
+    
+    
+    echo json_encode(array(
+        "result" => "SUCCESS",
+        "html" => $html
+    ));
 }
 catch(Exception $ex)
 {
-	echo $ex->getMessage();
+    echo json_encode(array(
+        "result" => "ERROR",
+        "message" => $ex->getMessage()
+    ));
 }
 
 

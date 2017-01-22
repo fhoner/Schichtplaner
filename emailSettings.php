@@ -207,14 +207,7 @@ abstract class emailSettings
     public static function send($recipients, $subject, $body, &$error = null)
     {
         if(emailSettings::$method == emailSendMethod::PHPMAILER)
-        {
-            if (strpos(ROOT, 'admin') !== FALSE)
-                require_once(BASEDIR . "../sources/phpmailer/PHPMailerAutoload.php");
-            else
-                require_once(BASEDIR . "sources/phpmailer/PHPMailerAutoload.php");
- 
-			
-			
+        {	
             $mail = new PHPMailer(true);
             $mail->IsHTML(true);
             $mail->CharSet = 'UTF-8';

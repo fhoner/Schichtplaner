@@ -1,0 +1,15 @@
+{
+    "name": "fhoner/schichtplaner",
+    "description": "tool for managing schedules for events",
+    "require": {
+        "phpmailer/phpmailer": "^5.2",
+        "dompdf/dompdf": "^0.7.0"
+    },
+    "license": "NOLICENSE",
+    "authors": [
+        {
+            "name": "Felix Honer",
+            "email": "privat@felix-honer.com"
+        }
+    ]
+}

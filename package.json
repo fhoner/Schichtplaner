@@ -1,0 +1,23 @@
+{
+  "name": "schichtplaner",
+  "description": "tool for managing schedules of events",
+  "repository": {
+    "type": "git"
+  },
+  "dependencies": {
+    "jquery": "^1.11.4",
+    "jquery-ui-dist": "^1.11.4",
+    "bootstrap": "^3.3.7",
+    "bootstrap-switch": "^3.3.2",
+    "bootstrap-datepicker": "git://github.com/uxsolutions/bootstrap-datepicker.git",
+    "mindmup-editable": "git://github.com/fhoner/editable-table.git",
+    "bootbox": "^4.4.0",
+    "font-awesome": "^4.7.0",
+    "bootstrapFormHelpers": "git://github.com/winmarkltd/BootstrapFormHelpers.git"
+  },
+  "license": "UNLICENSED",
+  "devDependencies": {
+    "grunt": "^1.0.1",
+    "grunt-contrib-copy": "^1.0.0"
+  }
+}

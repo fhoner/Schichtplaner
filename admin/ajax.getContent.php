@@ -100,7 +100,12 @@ switch($_POST['v'])
             $tpl->insert("shifts", $sh->getOutput());
         }
         
-        foreach(dbConn::query("SELECT * FROM :prefix:shift WHERE plan = :0 ORDER BY fromDate ASC, toDate DESC", $plan['name']) as $r)
+        foreach(dbConn::query("SELECT 
+                                    shiftId,
+                                    plan,
+                                    DATE_FORMAT(`fromDate`, '%H:%i') AS fromDate,
+                                    DATE_FORMAT(`toDate`, '%H:%i') AS toDate
+                               FROM :prefix:shift WHERE plan = :0 ORDER BY fromDate ASC, toDate DESC", $plan['name']) as $r)
         {
             $sh = new template("admin/plan.edit.time");
             $sh->insert("id" ,$r['shiftId']);

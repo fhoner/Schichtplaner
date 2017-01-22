@@ -8,7 +8,7 @@
  * CREATE PLAN
  */
 
-function create(){        
+function create() {
     $.ajax({
         url: "ajax.createPlan.php",
         method: "POST",
@@ -17,9 +17,9 @@ function create(){
             "public": $("#public-to").val(),
             "editable": $("#edit-to").val()
         },
-        success: function(result) {
+        success: function (result) {
             if (result.substring(0, 7) == "SUCCESS") {
-                result = result.substr(7, result.length - 7); 
+                result = result.substr(7, result.length - 7);
                 $("#name").val("");
                 $("#public-to").val("");
                 $("#edit-to").val("");
@@ -32,17 +32,7 @@ function create(){
     })
 }
 
-
-/*
- * EDIT PLAN
- */
-
-var deletedShifts = [];
-planname = getParameterByName('p');
-
-$('#table-productions').editableTableWidget();
-
-function deletePlan(name){
+function deletePlan(name) {
     bootbox.dialog({
         message: "Soll der Plan <strong>" + planname + "</strong> mit allen Daten gelöscht werden? ",
         title: "Löschen des Plans <strong>" + planname + "</strong> bestätigen",
@@ -50,22 +40,22 @@ function deletePlan(name){
             main: {
                 label: "Abbrechen",
                 className: "btn-default",
-                callback: function() { }
+                callback: function () { }
             },
             danger: {
                 label: "Löschen",
                 className: "btn-danger",
-                callback: function() {
+                callback: function () {
                     $.ajax({
                         url: root + "admin/ajax.removePlan.php",
                         method: "POST",
                         data: {
                             plan: planname
                         },
-                        success: function(result) {
-                            if(result == "SUCCESS") {
-                                $(".nav-plan").each(function(){   // remove plan from nav
-                                    if($(this).html() == planname)
+                        success: function (result) {
+                            if (result == "SUCCESS") {
+                                $(".nav-plan").each(function () {   // remove plan from nav
+                                    if ($(this).html() == planname)
                                         $(this).closest("li").remove();
                                 });
                                 history.pushState('data', '', root + "admin/index.php?v=dashboard");
@@ -81,12 +71,12 @@ function deletePlan(name){
     });
 }
 
-function createShift(el){
+function createShift(el) {
     $(el).prop("disabled", true);
     var obj = {};
     obj.from = $("#new-shift-from").find("input").val();
     obj.to = $("#new-shift-to").find("input").val();
-    
+
     $.ajax({
         url: root + "admin/ajax.createShift.php",
         method: "POST",
@@ -94,8 +84,8 @@ function createShift(el){
             data: obj,
             plan: planname
         },
-        success: function(result){
-            if(result == "SUCCESS")
+        success: function (result) {
+            if (result == "SUCCESS")
                 window.location.reload(true);
             else {
                 show("Fehler", result);
@@ -105,30 +95,30 @@ function createShift(el){
     });
 }
 
-function saveShifts(el){
+function saveShifts(el) {
     $(el).prop("disabled", true);
-    
+
     var obj = {};
     var updated = [];
     obj.deleted = deletedShifts;
-    $(".tr-shift").each(function(){
+    $(".tr-shift").each(function () {
         var t = {};
         t['id'] = $(this).find(".tr-shift-uid").html();
         t['from'] = $(this).find(".tr-shift-from").find("input").val();
         t['to'] = $(this).find(".tr-shift-to").find("input").val();
-        
+
         updated.push(t);
     });
     obj.updated = updated;
-    
+
     $.ajax({
         url: root + "admin/ajax.updateShifts.php",
         method: "POST",
         data: {
             data: obj
         },
-        success: function(result){
-            if(result == "SUCCESS")
+        success: function (result) {
+            if (result == "SUCCESS")
                 loadContent();
             else {
                 show("Fehler", result);
@@ -147,12 +137,12 @@ function createProduction(el) {
             plan: planname,
             name: $("#prod-name").val()
         },
-        success: function(result){
-            if(result == "SUCCESS")
+        success: function (result) {
+            if (result == "SUCCESS")
                 loadContent();
             else
                 show("Fehler", result);
-            
+
             $(el).prop("disabled", false);
         }
     });
@@ -160,7 +150,7 @@ function createProduction(el) {
 
 function toggle(el) {
     var cb = $(el).find("input");
-    if($(cb).is(":checked")) {
+    if ($(cb).is(":checked")) {
         $(cb).prop("checked", false);
     }
     else {
@@ -168,7 +158,7 @@ function toggle(el) {
     }
 }
 
-$(function(){
+$(function () {
     var hash = window.location.hash;
     hash && $('ul.nav a[href="' + hash + '"]').tab('show');
 
@@ -182,7 +172,7 @@ $(function(){
 
 function savePlanGeneral(el) {
     $(el).prop("disabled", true);
-    
+
     var lines = $('#email-subscribers').val().split(/\n/);
     var texts = [];
     for (var i = 0; i < lines.length; i++) {
@@ -190,30 +180,30 @@ function savePlanGeneral(el) {
             texts.push($.trim(lines[i]));
         }
     }
-    
+
     $.ajax({
         url: root + "admin/ajax.updatePlan.php",
         method: "POST",
         data: {
-            originalName:   $("#name-original").val(),
-            name:           $("#name").val(),
-            public:         $("#public-to").val(),
-            editable:       $("#edit-to").val(),
-            subscribers:    lines
+            originalName: $("#name-original").val(),
+            name: $("#name").val(),
+            public: $("#public-to").val(),
+            editable: $("#edit-to").val(),
+            subscribers: lines
         },
-        success: function(result){
-            if(result == "SUCCESS") {                    
-                $("#nav-plans li").each(function(){
-                    if($(this).find("a").html() == $("#name-original").val()){
+        success: function (result) {
+            if (result == "SUCCESS") {
+                $("#nav-plans li").each(function () {
+                    if ($(this).find("a").html() == $("#name-original").val()) {
                         $(this).find("a")
                             .html($("#name").val())
                             .attr("src", root + "admin/index.php?v=plan&p=" + $("#name").val());
                     }
                 });
-                
+
                 history.pushState('data', '', root + "admin/index.php?v=plan&p=" + $("#name").val());
                 loadContent();
-                
+
                 planname = $("#name").val();
                 $("#name-original").val(planname);
                 //show("Änderungen gespeichert", "Die Änderungen wurden erfolgreich gespeichert.");*/
@@ -229,30 +219,30 @@ function savePlanGeneral(el) {
 function saveProductions(el) {
     $(el).prop("disabled", true);
     var checked = [];
-    $(".tr-production").each(function(){
+    $(".tr-production").each(function () {
         var shifts = {};
         var arr = [];
         shifts.uid = $(this).find(".tr-production-uid").html();
         shifts.name = $(this).find(".tr-production-name").html();
-        
+
         var master = {};
         master.name = $(this).find(".tr-production-master-name").html();
         master.email = $(this).find(".tr-production-master-email").html();
         shifts.master = master;
-        
-        $(this).find(".tr-production-shifts").each(function(){
-            $(this).find(".production-shift-entry").each(function(){
+
+        $(this).find(".tr-production-shifts").each(function () {
+            $(this).find(".production-shift-entry").each(function () {
                 var temp = {};
                 temp['id'] = $(this).find(".production-shift-entry-name").val();
                 temp['checked'] = $(this).find(".production-shift-entry-name").is(":checked");
                 temp['max'] = $(this).find(".production-shift-entry-required").val();
-                arr.push(temp); 
+                arr.push(temp);
             });
         });
         shifts.shifts = arr;
         checked.push(shifts);
-    });        
-    
+    });
+
     $.ajax({
         url: root + "admin/ajax.updateProductions.php",
         method: "POST",
@@ -260,8 +250,8 @@ function saveProductions(el) {
             data: checked,
             plan: planname
         },
-        success: function(result){
-            if(result == "SUCCESS")
+        success: function (result) {
+            if (result == "SUCCESS")
                 loadContent();
             else {
                 show("Fehler", result);
@@ -271,39 +261,46 @@ function saveProductions(el) {
     });
 }
 
-$("body").on("click", ".tr-production-delete", function() {
+var deletedShifts = [];
+function initPlans() {
+    deletedShifts = [];
+    planname = getParameterByName('p');
+    $('#table-productions').editableTableWidget();
+}
+
+$("body").on("click", ".tr-production-delete", function () {
     var el = $(this);
     $(this).closest("tr")
         .css({
-            "background-color":     "#f3dede",
-            "cursor":               "not-allowed"
+            "background-color": "#f3dede",
+            "cursor": "not-allowed"
         })
         .find("td").addClass("readonly")
         .closest("tr").find("table")
-            .css({
-                "background-color":     "#f3dede",
-                "cursor":               "not-allowed"
-            });
-    setTimeout(function(){
+        .css({
+            "background-color": "#f3dede",
+            "cursor": "not-allowed"
+        });
+    setTimeout(function () {
         $(el).closest("tr").remove();
-    }, 1000);        
+    }, 1000);
 });
 
-$("body").on("click", ".tr-shift-delete", function() {
+$("body").on("click", ".tr-shift-delete", function () {
     var el = $(this);
     deletedShifts.push($(this).closest("tr").find(".tr-shift-uid").html());
-    
+
     $(this).closest("tr")
         .css({
-            "background-color":     "#f3dede",
-            "cursor":               "not-allowed"
+            "background-color": "#f3dede",
+            "cursor": "not-allowed"
         })
     $(this).closest("tr")
-            .css({
-                "background-color":     "#f3dede",
-                "cursor":               "not-allowed"
-            });
-    setTimeout(function(){
+        .css({
+            "background-color": "#f3dede",
+            "cursor": "not-allowed"
+        });
+    setTimeout(function () {
         $(el).closest("tr").remove();
-    }, 250);        
+    }, 250);
 });

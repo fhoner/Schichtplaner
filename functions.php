@@ -38,7 +38,7 @@ function groupShifts($plan)
                              ON ps.shift = sh.shiftId
                              WHERE production = :0 AND sh.plan = :1
                              ORDER BY fromDate ASC, toDate DESC", $r['name'], $plan) as $s)
-            {
+            {                
                 $arr[] = $s['fromDate'] . "-" . $s['toDate'];
                 $hasShifts = true;
             }
@@ -95,19 +95,38 @@ function groupShifts($plan)
                     {
                         foreach($shifts[$collisionFreeIndex]['shifts'] as $sh)
                         {
+                            // prepend
                             if(explode("-", str_replace(":", "", ($sh)))[0] >
                                 explode("-", str_replace(":", "", ($a)))[0])
                             {
                                 $newArr = Array();
-                                for($i = 0; $i < $c; $i++)
+                                for($i = 0; $i < $c; $i++) {
                                     $newArr[] = $shifts[$collisionFreeIndex]['shifts'][$i];
+                                }
                                 $newArr[] = $a;
-                                for($i = $c; $i < count($shifts[$collisionFreeIndex]['shifts']); $i++)
+                                for($i = $c; $i < count($shifts[$collisionFreeIndex]['shifts']); $i++) {
                                     $newArr[] = $shifts[$collisionFreeIndex]['shifts'][$i];
+                                }
 
                                 $shifts[$collisionFreeIndex]['shifts'] = $newArr;
                                 break;
                             }
+                            // append
+                            else 
+                            {
+                                $newArr = Array();
+                                for($i = 0; $i < $c; $i++) {
+                                    $newArr[] = $shifts[$collisionFreeIndex]['shifts'][$i];
+                                }
+                                for($i = $c; $i < count($shifts[$collisionFreeIndex]['shifts']); $i++) {
+                                    $newArr[] = $shifts[$collisionFreeIndex]['shifts'][$i];
+                                }
+                                $newArr[] = $a;
+
+                                $shifts[$collisionFreeIndex]['shifts'] = $newArr;
+                                break;
+                            }
+                            
                             $c++;
                         }
                     }

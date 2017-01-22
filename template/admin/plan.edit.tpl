@@ -32,7 +32,7 @@
                     <div class="form-group">
                         <label>Öffentlich bis</label><br />
                         <div class="input-group date" data-provide="datepicker" style="width:350px;">
-                            <input class="form-control datepicker" data-date-format="mm.dd.yyyy" id="public-to" value="${public}$">
+                            <input class="form-control datepicker" id="public-to" value="${public}$">
                             <div class="input-group-addon">
                                 <span class="glyphicon glyphicon-th"></span>
                             </div>
@@ -41,7 +41,7 @@
                     <div class="form-group">
                         <label>Editierbar bis</label><br />
                         <div class="input-group date" data-provide="datepicker" style="width:350px;">
-                            <input class="form-control datepicker" data-date-format="mm.dd.yyyy" id="edit-to" value="${editable}$">
+                            <input class="form-control datepicker" id="edit-to" value="${editable}$">
                             <div class="input-group-addon">
                                 <span class="glyphicon glyphicon-th"></span>
                             </div>
@@ -169,9 +169,16 @@
         </div>
     </div>
 </div>
-<script src="${${root}$}$js/admin.plan.js"></script>
-<script src="${${root}$}$sources/bootstrapformhelpers/js/bootstrap-formhelpers.js"></script>
+<script>initPlans();</script>
 <script>
+$(document).ready(function() {
+
+    $(".bfh-timepicker").each(function(el) {
+        $(this).bfhtimepicker('toggle');
+        $(this).val($(this).data("time"));
+    });
+
+});
 $(".datepicker").datepicker({
     format: "dd.mm.yyyy" 
 });

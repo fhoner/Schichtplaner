@@ -19,6 +19,11 @@ th {
 td.td-time {
     text-align: center;
     vertical-align: middle !important;
+    height:70px;
+    white-space:normal !important;
+}
+#table-edit tr td {
+    vertical-align: middle !important;
 }
 td.td-user {
     cursor: pointer;
@@ -30,6 +35,9 @@ td.td-user {
     right:2px; 
     font-size:10px; 
     color:silver;
+}
+.td-comment {
+    display:none;
 }
 .td-user .user-email {
     display: none;
@@ -57,6 +65,9 @@ td.td-user {
     margin-left:3px;
     margin-right:3px;
 }
+body > .container {
+    padding: 60px 0px 30px;
+}
 .footer {
     position: absolute;
     bottom: 0;
@@ -65,15 +76,24 @@ td.td-user {
     height: 60px;
     background-color: #f5f5f5;
 }
-body > .container {
-    padding: 60px 15px 0;
-}
 .container .text-muted {
     margin: 20px 0;
 }
 .footer > .container {
     padding-right: 15px;
     padding-left: 15px;
+}
+.user-email {
+    display:none;
+}
+.not-fixed-hint, .is-fixed-hint {
+    font-size:12px;
+}
+.not-fixed-hint {
+    color: rgba(255, 100, 0, 0.8);
+}
+.is-fixed-hint {
+    color: rgba(28, 169, 0, 0.8);
 }
 
 @media (max-width:700px) {
@@ -83,6 +103,10 @@ body > .container {
     .tab-pane {
         margin:10px;
         margin-top:20px;
+    }
+    .nav-tabs li
+    {
+        width:100%!important;
     }
 }
 @media (min-width:701px) {

@@ -13,11 +13,13 @@ function getHistory($limit)
                                 nameAfter, 
                                 emailBefore, 
                                 emailAfter, 
+                                isFixedBefore,
+                                isFixedAfter,
                                 production, 
                                 fromDate,
                                 toDate,
-                                mvoe_plan.name AS plan, 
-                                mvoe_worker_history.created
+                                :prefix:plan.name AS plan, 
+                                :prefix:worker_history.created
                             FROM :prefix:worker_history 
                             INNER JOIN :prefix:shift ON :prefix:shift.shiftId = :prefix:worker_history.shift
                             INNER JOIN :prefix:plan ON :prefix:shift.plan = :prefix:plan.name
@@ -47,11 +49,24 @@ function getHistory($limit)
         }
         $change->insert("shift", "<small>$r[plan], $r[production]</small><br />" .
                                 substr($r['fromDate'], 0, 5) . " - " . substr($r['toDate'], 0, 5));
-        if($r['nameBefore'] == $r['nameAfter'])
+        if($r['nameBefore'] == $r['nameAfter']
+                && $r['isFixedBefore'] == $r['isFixedAfter'])
             $change->insert("user", $r['nameAfter']);
         else
-            $change->insert("user", "<small><span style=\"text-decoration:line-through;\">$r[nameBefore]</span></small>
-            <br /><strong>$r[nameAfter]</strong>");
+            $change->insert("user", 
+                ($r['action'] == "update" || $r['action'] == "delete" ? 
+                "<small>" .
+                    ($r['isFixedBefore'] ? "<span class=\"glyphicon glyphicon-question-sign worker-not-fixed\" aria-hidden=\"true\"></span> " :
+                                          "<span class=\"glyphicon glyphicon-ok-sign worker-fixed\" aria-hidden=\"true\"></span> ") : "") .
+                    "<span style=\"text-decoration:line-through;\">$r[nameBefore]</span>
+                </small>" .
+                ($r['action'] == "update" ? "<br>" : "") .
+                "<strong>" .
+                    ($r['action'] == "update" || $r['action'] == "insert" ? 
+                    ($r['isFixedAfter'] ? "<span class=\"glyphicon glyphicon-question-sign worker-not-fixed\" aria-hidden=\"true\"></span> " :
+                                           "<span class=\"glyphicon glyphicon-ok-sign worker-fixed\" aria-hidden=\"true\"></span> ") : "") .                
+                    "$r[nameAfter]
+                </strong>");
         if($r['emailBefore'] == $r['emailAfter'])
             $change->insert("email", $r['emailAfter']);
         else

@@ -231,8 +231,26 @@ abstract class frontend
         
         require_once(BASEDIR . "sources/minifier/Minifier.php");
         return \JShrink\Minifier::minify($js);
+    }    
+
+    /**
+     * Minimies css code to the minimum.
+     *
+     * @param string css code before minimizing as string
+     * @return string minified css code as string
+     * @static
+     * @since Version 1.0
+     */
+    public static function minifyCss($css)
+    {
+        $lib = BASEDIR . "sources/minifier/cssmin-minified.php";
+
+        if(!file_exists($lib))
+            throw new Exception("Minifier library could not be loaded (" . $lib . ").");
+        
+        require_once($lib);
+        return CssMin::minify($css);
     }
-    
     
 }
 

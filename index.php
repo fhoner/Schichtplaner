@@ -28,6 +28,7 @@ foreach(dbConn::query("SELECT *, IF(editable > CURRENT_TIMESTAMP, 1, 0) AS edita
     $tabContent->insert("active", $first ? "active" : "");
     $tabContent->insert("id", seoUrl($plan));
     $tabContent->insert("name", $plan);
+    $tabContent->insert("export", URL . "/export.php?plan=" . urlencode($plan));
     $tabContent->insert("hidden", $isReadonly ? "" : "hidden");
 
     $first = false;
@@ -62,7 +63,7 @@ foreach(dbConn::query("SELECT *, IF(editable > CURRENT_TIMESTAMP, 1, 0) AS edita
             foreach($values['shifts'] as $sh)
             {
                 $t = new template("shift");
-                $t->insert("fromToDate", str_replace(" ", "<br>", substr(str_replace(":00-", " - ", $sh), 0, 13)));
+                $t->insert("fromToDate", substr(str_replace(":00-", " - ", $sh), 0, 13));
                 
                 $shiftId = dbConn::querySingle("SELECT shiftId FROM :prefix:shift WHERE 
                     plan = :0 AND fromDate = :1 AND toDate = :2 ",
@@ -72,15 +73,22 @@ foreach(dbConn::query("SELECT *, IF(editable > CURRENT_TIMESTAMP, 1, 0) AS edita
                                                     
                 $has = false;
                 $required = 0;
+                $comment = "";
                 foreach(dbConn::query("SELECT * FROM :prefix:production_shift WHERE production = :0 AND shift = :1", 
                     $p, $shiftId) as $r)
                 {
                     $required = $r['required'];
+                    $comment = $r['comment'];
                     $has = true;
+                }
+                
+                if(!$has) {
+                    continue;
                 }
 
                 $prodShift = new template("production_shift");
                 $prodShift->insert("shiftId", $shiftId);
+                $prodShift->insert("comment", $comment);
                 $prodShift->insert("disabled", $has ? "" : "shift-disabled");
                 $prodShift->insert("unique", seoUrl("$plan-$p-" . substr(str_replace(":00-", " - ", $sh), 0, 13)));
 
@@ -91,10 +99,11 @@ foreach(dbConn::query("SELECT *, IF(editable > CURRENT_TIMESTAMP, 1, 0) AS edita
                     $prodShift->insert("name", $p);
 
                     // get workers of one shift in one production
-                    foreach(dbConn::query("SELECT * FROM :prefix:worker WHERE production = :0 AND shift = :1", 
+                    foreach(dbConn::query("SELECT * FROM :prefix:worker WHERE production = :0 AND shift = :1 ORDER BY name ASC", 
                         $p, $shiftId) as $r)
                     {
                         $worker = new template("worker");
+                        $worker->insert("fixed", $r['isFixed'] ? "" : "not-fixed");
                         $worker->insert("name", $r['name']);
                         $worker->insert("email", $r['email']);
                         $prodShift->insert("workers", $worker->getOutput());
@@ -118,22 +127,23 @@ foreach(dbConn::query("SELECT *, IF(editable > CURRENT_TIMESTAMP, 1, 0) AS edita
          
         $planTpl = new template("plan.table");
         $planTpl->insert("readonly", $isReadonly ?  "plan-readonly" : "");
-        $tblCount = count($values['productions']);
-        $colSize = 12;
-        
-        if($colSum + $colSize > 12)
+        $colSize = count($values['productions']);
+        $nextColSize = 0;
+        if(count($shifts) > $index + 1) 
+            $nextColSize = count($shifts[$index + 1]['productions']);
+        if($colSize + $nextColSize > 6)
         {
-            $colSum = $colSize;
+            $colSum = 0;
             $planTpl->insert("linebreak", "<div style=\"clear:both;\"></div>");
             $planTpl->insert("tableCount", $colSize);
         }
         else
-        {        
-            if($colSum == 0)
-                $colSum = $colSize;
-            $colSum += $colSize;
+        {      
+            $colSum = $colSize;
             $planTpl->insert("tableCount", $colSize);
-        }               
+        }        
+        
+        //echo "$plan $colSize $colSum<br>";       
 
         foreach($values['productions'] as $prod)
         {
@@ -172,14 +182,15 @@ foreach(dbConn::query("SELECT *, IF(editable > CURRENT_TIMESTAMP, 1, 0) AS edita
 
                 $has = false;
                 $required = 0;
+                $prodShift = new template("production_shift");
                 foreach(dbConn::query("SELECT * FROM :prefix:production_shift WHERE production = :0 AND shift = :1", 
                     $prod, $shiftId) as $r)
                 {
                     $required = $r['required'];
+                    $prodShift->insert("comment", $r['comment']);
                     $has = true;
                 }
 
-                $prodShift = new template("production_shift");
                 $prodShift->insert("shiftId", $shiftId);
                 $prodShift->insert("disabled", $has ? "" : "shift-disabled");
                 $prodShift->insert("unique", seoUrl("$plan-$prod-" . substr(str_replace(":00-", " - ", $sh), 0, 13)));
@@ -191,12 +202,13 @@ foreach(dbConn::query("SELECT *, IF(editable > CURRENT_TIMESTAMP, 1, 0) AS edita
                     $prodShift->insert("name", $prod);
 
                     // get workers of one shift in one production
-                    foreach(dbConn::query("SELECT * FROM :prefix:worker WHERE production = :0 AND shift = :1", 
+                    foreach(dbConn::query("SELECT * FROM :prefix:worker WHERE production = :0 AND shift = :1 ORDER BY name ASC", 
                         $prod, $shiftId) as $r)
                     {
                         $worker = new template("worker");
                         $worker->insert("name", $r['name']);
                         $worker->insert("email", $r['email']);
+                        $worker->insert("fixed", $r['isFixed'] ? "" : "not-fixed");
                         $prodShift->insert("workers", $worker->getOutput());
                     }
                 }

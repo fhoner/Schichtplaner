@@ -199,8 +199,8 @@ CREATE TABLE `mvoe_worker` (
 --
 
 INSERT INTO `mvoe_worker` (`name`, `email`, `production`, `plan`, `shift`) VALUES
-('123 123', 'asddsdsa', 'Bier', 'Mittwoch', 18),
-('123123 123', 'dsasad', 'Bier', 'Mittwoch', 18);
+('Peter Pressel', 'asd@asd.de', 'Bier', 'Mittwoch', 18),
+('Moritz Mauch', 'asd2@asd.de', 'Bier', 'Mittwoch', 18);
 
 --
 -- Trigger `mvoe_worker`
@@ -298,37 +298,6 @@ CREATE TABLE `mvoe_worker_history` (
 --
 -- Daten für Tabelle `mvoe_worker_history`
 --
-
-INSERT INTO `mvoe_worker_history` (`historyId`, `nameBefore`, `nameAfter`, `emailBefore`, `emailAfter`, `production`, `plan`, `shift`, `action`, `created`) VALUES
-(30, 'Dominik Honer', NULL, 'dh@web.de', NULL, 'Bar', 'Donnerstag', 6, 'delete', '2016-01-22 19:26:04'),
-(31, 'Eileen Lehmann', NULL, 'lehmann@gmx.de', NULL, 'Bar', 'Donnerstag', 6, 'delete', '2016-01-22 19:26:04'),
-(32, 'einer noch', NULL, 'asd@de.de', NULL, 'Geschirrmobil', 'Donnerstag', 2, 'delete', '2016-01-22 19:26:04'),
-(33, 'Felix Honer', NULL, 'privat@feix-honer.com', NULL, 'Steak / Rote', 'Donnerstag', 3, 'delete', '2016-01-22 19:26:04'),
-(34, 'Jana Honer', NULL, 'jhoner@web.de', NULL, 'Pommes', 'Donnerstag', 1, 'delete', '2016-01-22 19:26:04'),
-(35, 'Jenny Zischek', NULL, 'zischek@gmx.de', NULL, 'Bar', 'Donnerstag', 6, 'delete', '2016-01-22 19:26:04'),
-(36, 'Joachim Sattler', NULL, 'sattler@mvoe.de', NULL, 'Bar', 'Donnerstag', 6, 'delete', '2016-01-22 19:26:04'),
-(37, 'noch einerrrrrrrr', NULL, 'asd@åsd.de', NULL, 'Geschirrmobil', 'Donnerstag', 2, 'delete', '2016-01-22 19:26:04'),
-(38, 'Petti Coats', NULL, 'petti@coats.de', NULL, 'Bar', 'Donnerstag', 5, 'delete', '2016-01-22 19:26:04'),
-(39, NULL, 'eins eins', NULL, 'eins@eins.de', 'Geschirrmobil', 'Donnerstag', 1, 'insert', '2016-01-22 19:46:26'),
-(40, NULL, 'zwei zwei', NULL, 'zwei@zwei.de', 'Geschirrmobil', 'Donnerstag', 1, 'insert', '2016-01-22 19:46:26'),
-(41, NULL, 'asdasdsda', NULL, 'dasssad', 'Geschirrmobil', 'Donnerstag', 2, 'insert', '2016-01-22 19:48:01'),
-(42, NULL, 'assdaads', NULL, 'dassadasd', 'Geschirrmobil', 'Donnerstag', 2, 'insert', '2016-01-22 19:48:01'),
-(43, 'assdaads', NULL, 'dassadasd', NULL, 'Geschirrmobil', 'Donnerstag', 2, 'delete', '2016-01-22 19:48:08'),
-(44, NULL, 'asdsdaasdsad', NULL, 'asdsdasdds', 'Geschirrmobil', 'Donnerstag', 2, 'insert', '2016-01-22 19:48:08'),
-(45, 'asdasdsda', NULL, 'dasssad', NULL, 'Geschirrmobil', 'Donnerstag', 2, 'delete', '2016-01-22 19:48:16'),
-(46, 'asdsdaasdsad', NULL, 'asdsdasdds', NULL, 'Geschirrmobil', 'Donnerstag', 2, 'delete', '2016-01-22 19:48:16'),
-(50, 'eins eins', NULL, 'eins@eins.de', NULL, 'Geschirrmobil', 'Donnerstag', 1, 'delete', '2016-01-23 14:47:36'),
-(51, 'zwei zwei', NULL, 'zwei@zwei.de', NULL, 'Geschirrmobil', 'Donnerstag', 1, 'delete', '2016-01-23 14:47:36'),
-(52, NULL, 'sadadsasd', NULL, 'dsasad', 'Bier', 'Mittwoch', 18, 'insert', '2016-01-23 15:57:52'),
-(53, 'sadadsasd', 'sadadsa', 'dsasad', 'dsasad', 'Bier', 'Mittwoch', 18, 'update', '2016-01-23 16:08:38'),
-(54, 'sadadsa', 'asdasddsadsa', 'dsasad', 'dsasad', 'Bier', 'Mittwoch', 18, 'update', '2016-01-23 16:08:59'),
-(55, 'asdasddsadsa', 'asdasddsadsa123', 'dsasad', 'dsasad', 'Bier', 'Mittwoch', 18, 'update', '2016-01-23 16:09:24'),
-(56, 'asdasddsadsa123', 'asdasddsadsa1', 'dsasad', 'dsasad', 'Bier', 'Mittwoch', 18, 'update', '2016-01-23 16:10:42'),
-(57, 'asdasddsadsa1', '123123 123', 'dsasad', 'dsasad', 'Bier', 'Mittwoch', 18, 'update', '2016-01-23 16:28:47'),
-(58, NULL, 'asddsa das', NULL, 'asddsdsa', 'Bier', 'Mittwoch', 18, 'insert', '2016-01-23 16:28:47'),
-(59, NULL, 'cccccccc', NULL, 'ccccccc', 'Bier', 'Mittwoch', 18, 'insert', '2016-01-23 16:28:47'),
-(60, 'cccccccc', NULL, 'ccccccc', NULL, 'Bier', 'Mittwoch', 18, 'delete', '2016-01-23 16:31:32'),
-(61, 'asddsa das', '123 123', 'asddsdsa', 'asddsdsa', 'Bier', 'Mittwoch', 18, 'update', '2016-01-23 16:31:32');
 
 --
 -- Trigger `mvoe_worker_history`
