@@ -31,10 +31,17 @@ td.td-user {
 }
 .td-user-max {
     position: absolute; 
-    bottom:2px; 
-    right:2px; 
+    bottom:4px; 
+    right:4px; 
     font-size:10px; 
-    color:silver;
+    color:#888 !important;
+    width:16px;
+    height: 16px;
+    background: #eee; 
+    -moz-border-radius: 9px; 
+    -webkit-border-radius: 9px; 
+    border-radius: 9px;
+    text-align:center;
 }
 .td-comment {
     display:none;
