@@ -365,31 +365,28 @@ $(document).ready(function () {
             $("#table-edit tbody").html(tblBody);
             $("#editEntry").modal();
 
+            // enable all controls
+            $('#table-edit').editableTableWidget();
+            $(".add-worker").removeAttr("disabled");
+            $("#save-shift").prop("disabled", false);
+            $("#table-edit").find(".tr-delete-worker").show();
+            $('#table-edit').editableTableWidget();
+            $("#btn-add-user").prop("disabled", false);
+            $("#save-shift").prop("disabled", false);
+
             if ($(this).closest("table").hasClass("plan-readonly")) {
                 $(".add-worker").prop("disabled", true);
                 $("#save-shift").prop("disabled", true);
                 $("#table-edit input").prop("disabled", true);
                 $("input[type=checkbox]").prop("readonly", true);
+                $("#table-edit").find(".tr-delete-worker").hide();  // hide delete icons
+                $("#table-edit").find(".delete-user").closest("td").remove();
+                $("#btn-add-user").prop("disabled", true);
+                $("#save-shift").prop("disabled", true);
             }
             if (max <= $(this).find(".worker").length) {
                 $(".add-worker").prop("disabled", true);
                 $("#save-shift").prop("disabled", true);
-            }
-            else {
-                $('#table-edit').editableTableWidget();
-                $(".add-worker").removeAttr("disabled");
-                $("#save-shift").prop("disabled", false);
-            }
-
-            // remove delete trash icon
-            if ($(this).closest("table").hasClass("plan-readonly")) {
-                $("#table-edit").find(".tr-delete-worker").hide();
-                $("#table-edit").find(".delete-user").closest("td").remove();
-            }
-            else {
-                $("#table-edit").find(".tr-delete-worker").show();
-                $('#table-edit').editableTableWidget();
-                $("#save-shift").prop("disabled", false);
             }
 
             // enable bootstrap switch plugin
