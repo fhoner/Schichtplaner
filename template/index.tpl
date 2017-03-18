@@ -74,9 +74,7 @@
     </div>
     <div style="clear:both;"></div>
     <footer class="footer">
-        <div class="container"><br>
-            <p class="text-muted"><small>v1.0 &copy; 2016 Felix Honer, MV Öschelbronn e.V.</small></p>
-        </div>
+        <p class="text-muted"><small>v1.0 &copy; 2016 Felix Honer, MV Öschelbronn e.V.</small></p>
     </footer>
 </body>
 

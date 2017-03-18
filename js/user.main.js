@@ -386,7 +386,6 @@ $(document).ready(function () {
             }
             if (max <= $(this).find(".worker").length) {
                 $(".add-worker").prop("disabled", true);
-                $("#save-shift").prop("disabled", true);
             }
 
             // enable bootstrap switch plugin

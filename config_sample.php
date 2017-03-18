@@ -16,11 +16,10 @@ require("dbConn.php");
 require("template.php");
 
 dbConn::setHost("localhost");
-dbConn::setDatabase("schichtplaner");
+dbConn::setDatabase("planer");
 dbConn::setUsername("root");
 dbConn::setPassword("root");
-dbConn::setTablePrefix("prefix_");
-template::setDoIndent(true);
+dbConn::setTablePrefix("planer_");
 
 require_once("emailSettings.php");
 emailSettings::setHost("localhost");
