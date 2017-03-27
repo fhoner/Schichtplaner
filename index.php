@@ -1,5 +1,7 @@
 <?php
 
+session_start();
+
 $start = microtime();
 require("config.php");
 require("functions.php");
@@ -8,6 +10,8 @@ $count = 0;
 $first = true;
 $tpl = new template("index");
 $tpl->insert("organisation", ORGANISATION);
+$tpl->insert("loggedIn", isset($_SESSION['user']) ? "true" : "false");
+$tpl->insert("username", isset($_SESSION['userData']) ? $_SESSION['userData']['name'] : "");
 
 // iterate plans
 foreach(dbConn::query("SELECT *, IF(editable > CURRENT_TIMESTAMP, 1, 0) AS editable FROM :prefix:plan 

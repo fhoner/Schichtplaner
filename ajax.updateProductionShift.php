@@ -4,6 +4,14 @@ require("config.php");
 require("functions.php");
 require("transaction.php");
 
+session_start();
+if (!isset($_SESSION['user'])) {
+    die(json_encode(array(
+        "result"    => "ERROR",
+        "message"   => "Unauthentifizierter Benutzer"
+    )));
+}
+
 /*
     Sample of an incoming data array:
 

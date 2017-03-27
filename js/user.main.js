@@ -1,13 +1,60 @@
 /*
  * main js file
  * Felix Honer
- * 2016/02/09
+ * 2017/03/09
  */
 
 var editObject = null; // save editing object to store changed into it
 var deletedArr = new Array();   // stores deleted objects
 var max = 0;    // required user count for one shift
 var planname = "${name}$";  // can change when user renames the plan; so use js variable instead of template engine
+var isLoggedIn = false; // boolean whether user is logged in or not
+
+function login() {
+    $("#loginModal").find("input, button").prop("disabled", true);
+    $("#loginResult").hide();
+    $("#loginProcessingIcon").show();
+
+    setTimeout(function() {
+        $.ajax({
+            url: "ajax.login.php",
+            method: "POST",
+            data: {
+                "username": $("#loginUsername").val(),
+                "password": $("#loginPassword").val()
+            },
+            success: function(res) {
+                res = JSON.parse(res);
+                if (res.success) {
+                    setIsLoggedIn(true);
+                    $("#loginModal").modal("hide");
+                    $("body").stop().hide().fadeIn("fast");
+                    $("#logoutButton").html('<i class="fa fa-sign-out" aria-hidden="true"></i>Ausloggen (<strong>' + res.username + '</strong>)');
+                } else {
+                    setIsLoggedIn(false);
+                    $("#loginResult").html('<div class="alert alert-danger">' + res.message + '</div>').show();
+                }
+
+                $("#loginModal").find("input, button").prop("disabled", false);
+                $("#loginProcessingIcon").hide();
+            }
+        });
+    }, 250);
+}
+
+function setIsLoggedIn(loggedIn) {
+    isLoggedIn = loggedIn;
+
+    if (isLoggedIn) {
+        $(".td-user").css("cursor", "pointer");
+        $("#loginButton").hide();
+        $("#logoutButton").show();
+    } else {
+        $(".td-user").css("cursor", "auto");
+        $("#logoutButton").hide();
+        $("#loginButton").show();
+    }
+}
 
 function updateWorkersFixedInfo(cell) {
     if (cell == typeof undefined || cell == null) {	 // update all cells 
@@ -85,6 +132,7 @@ function updateCells() {
             }
         }
         else {
+    $("#loginResult").hide();
             $(this).removeClass("warning danger");
             $(this).addClass("success");
         }
@@ -146,6 +194,10 @@ $(document).ready(function () {
     levelRows();
     updateWorkersFixedInfo(null);
 
+    if (loginRevisit) {
+        setIsLoggedIn(true);
+    }
+
     $(".top").tooltip({
         placement: "top"
     });
@@ -158,6 +210,35 @@ $(document).ready(function () {
         if ($(this).find(".delete-user").length > 0) {
             $(this).find(".delete-user").trigger("click");
         }
+    });
+
+    $("#loginButton").click(function() {
+        $("#loginResult").hide();
+        $("#loginModal").modal("toggle");
+    });
+
+    $("#loginForm").submit(function(ev) {
+        ev.preventDefault();
+        login();
+    });
+
+    $("#logoutButton").click(function() {
+        $(this).prop("disabled", true);
+        $.ajax({
+            url: "ajax.logout.php",
+            method: "POST",
+            success: function(res) {
+                res = JSON.parse(res);
+                console.log(res);
+                if (res.success) {
+                    setIsLoggedIn(false);
+                    $("body").stop().hide().fadeIn("fast");
+                } else {
+                    alert("Unbekannter Fehler");
+                }
+                $("#logoutButton").prop("disabled", false);
+            }
+        });
     });
 
     $("body").on("click", ".delete-user", function () {
@@ -316,7 +397,7 @@ $(document).ready(function () {
 
     $(".td-user")
         .mouseenter(function () {
-            if (!$(this).hasClass("info")) {
+            if (!$(this).hasClass("info") && isLoggedIn) {
                 $(this).stop().fadeTo("fast", 0.3, function () { });
             }
         })
@@ -324,7 +405,7 @@ $(document).ready(function () {
             $(this).stop().fadeTo("fast", 1.0, function () { });
         })
         .click(function () {
-            if ($(this).hasClass("info")) return;
+            if ($(this).hasClass("info") || !isLoggedIn) return;
 
             var newUrl = "";
             if (window.location.href.indexOf("s=") >= 0)
@@ -383,6 +464,8 @@ $(document).ready(function () {
                 $("#table-edit").find(".delete-user").closest("td").remove();
                 $("#btn-add-user").prop("disabled", true);
                 $("#save-shift").prop("disabled", true);
+
+                $("#table-edit tbody").find("td").addClass("readonly"); // make cells readonly
             }
             if (max <= $(this).find(".worker").length) {
                 $(".add-worker").prop("disabled", true);

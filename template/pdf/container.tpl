@@ -29,7 +29,7 @@
             td.td-time {
                 text-align: center;
                 vertical-align: middle !important;
-                height:100px;
+                /*height:100px;*/
                 white-space:normal !important;
             }
             .td-user {

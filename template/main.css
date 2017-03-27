@@ -26,7 +26,6 @@ td.td-time {
     vertical-align: middle !important;
 }
 td.td-user {
-    cursor: pointer;
     position:relative;
 }
 .td-user-max {
@@ -66,7 +65,7 @@ td.td-user {
 .shift-disabled {
     cursor: not-allowed !important;
 }
-#save-loading {
+#save-loading, #loginProcessingIcon {
     display:none;
     width: 15px;
     margin-left:3px;
@@ -119,4 +118,7 @@ body > .container {
     .tab-pane {
         margin:25px;
     }
+}
+input:-webkit-autofill {
+    -webkit-box-shadow: 0 0 0px 1000px white inset;
 }
