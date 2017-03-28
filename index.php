@@ -103,7 +103,7 @@ foreach(dbConn::query("SELECT *, IF(editable > CURRENT_TIMESTAMP, 1, 0) AS edita
                     $prodShift->insert("name", $p);
 
                     // get workers of one shift in one production
-                    foreach(dbConn::query("SELECT * FROM :prefix:worker WHERE production = :0 AND shift = :1 ORDER BY name ASC", 
+                    foreach(dbConn::query("SELECT * FROM :prefix:worker WHERE production = :0 AND shift = :1 ORDER BY position ASC", 
                         $p, $shiftId) as $r)
                     {
                         $worker = new template("worker");
@@ -206,7 +206,7 @@ foreach(dbConn::query("SELECT *, IF(editable > CURRENT_TIMESTAMP, 1, 0) AS edita
                     $prodShift->insert("name", $prod);
 
                     // get workers of one shift in one production
-                    foreach(dbConn::query("SELECT * FROM :prefix:worker WHERE production = :0 AND shift = :1 ORDER BY name ASC", 
+                    foreach(dbConn::query("SELECT * FROM :prefix:worker WHERE production = :0 AND shift = :1 ORDER BY position ASC", 
                         $prod, $shiftId) as $r)
                     {
                         $worker = new template("worker");

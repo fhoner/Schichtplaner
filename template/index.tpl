@@ -39,10 +39,11 @@
                 </div>
                 <div class="modal-body">
                     <strong>Hinweis: </strong>Durch Klicken in eine Zelle kann der jeweilige Eintrag bearbeitet werden.<br><br>
-                    <table class="table table-hover table-condensed table-bordered" id="table-edit">
+                    <table class="table table-condensed table-bordered" id="table-edit">
                         <thead>
                             <tr>
                                 <th class="tr-debug">UID</th>
+                                <th></th>
                                 <th style="width:50%;">Name</th>
                                 <th style="width:50%;">E-Mail</th>
                                 <th style="width:50%;">Fix</th>
@@ -50,7 +51,7 @@
                                 <th class="tr-delete-worker" style="width:10px;"></th>
                             </tr>
                         </thead>
-                        <tbody>
+                        <tbody id="table-edit-tbody">
                             <!-- filled by js -->
                         </tbody>
                     </table>
@@ -123,6 +124,7 @@
     <footer class="footer">
         <p class="text-muted"><small>v1.0 &copy; 2016 Felix Honer, MV Öschelbronn e.V.</small></p>
     </footer>
+
 </body>
 
 </html>

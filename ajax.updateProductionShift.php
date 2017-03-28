@@ -25,8 +25,8 @@ if (!isset($_SESSION['user'])) {
                     (
                         [0] => Array
                             (
-                                [name] => Corina Ott edited
-                                [email] => cott@gmx.de
+                                [name] => Adam Eva edited
+                                [email] => adameva@gmx.de
                             )
 
                     )
@@ -44,11 +44,11 @@ if (!isset($_SESSION['user'])) {
 
                         [1] => Array
                             (
-                                [name] => Wolfgang Bergler
-                                [email] => w.bergler@web.de
+                                [name] => Siegfried Sicher
+                                [email] => s.sicher@web.de
                                 [isFixed] => false
                                 [action] => create
-                                [uid] => Wolfgang Bergler\nw.bergler@web.de
+                                [uid] => Siegfried Sicher\ns.sicher@web.de
                             )
 
                     )
@@ -128,22 +128,27 @@ try
     // update existing or insert the added workers
     if(isset($d['workers']))
     {
+        $position = 0;
         foreach($d['workers'] as $key => $val)
         {
             if($val['action'] == "create")
             {
-                $t->addStatement("INSERT INTO :prefix:worker (name, email, production, plan, shift, isFixed) VALUES (:0, :1, :2, :3, :4, :5);",
+                $t->addStatement("INSERT INTO :prefix:worker 
+                    (name, email, production, plan, shift, isFixed, position) 
+                VALUES 
+                    (:0, :1, :2, :3, :4, :5, :6);",
                                     htmlspecialchars($val['name']),
                                     htmlspecialchars($val['email']),
                                     $d['production'],
                                     $_POST['plan'],
                                     (int)$d['shiftId'],
-                                    $val['isFixed'] == "true");
+                                    $val['isFixed'] == "true",
+                                    $position);
             }
             else if($val['action'] == "update")
             {
                 $arr = explode("\n", $val['uid']);
-                $t->addStatement("UPDATE :prefix:worker SET name = :0, email = :1, isFixed = :6
+                $t->addStatement("UPDATE :prefix:worker SET name = :0, email = :1, isFixed = :6, position = :7
                                                             WHERE production = :2 
                                                                     AND shift = :3
                                                                     AND name = :4
@@ -154,13 +159,16 @@ try
                                                                 $d['shiftId'],
                                                                 htmlspecialchars($arr[0]),
                                                                 htmlspecialchars($arr[1]),
-                                                                $val['isFixed'] == "true"
+                                                                $val['isFixed'] == "true",
+                                                                $position
                                                                 );
             }
             else
             {
                 echo "unsupported action on user " . $val['name'];
             }
+
+            $position++;
         }
     }
 
@@ -263,7 +271,7 @@ try
     
     // create html output and send to client
     $html = "";
-    foreach(dbConn::query("SELECT * FROM :prefix:worker WHERE production = :0 AND shift = :1 ORDER BY name ASC", 
+    foreach(dbConn::query("SELECT * FROM :prefix:worker WHERE production = :0 AND shift = :1 ORDER BY position ASC", 
         $d['production'], $d['shiftId']) as $r)
     {
         $worker = new template("worker");

@@ -433,6 +433,7 @@ $(document).ready(function () {
             $(this).find(".worker").each(function () {
                 tblBody += "<tr><td class=\"tr-debug user-edit-uid\">" + $(this).data("name") + "\n" +
                     $(this).data("email") + "</td>" +
+                    "<td class=\"user-sort readonly\"><i class=\"fa fa-arrows\"></i></td>" +
                     "<td class=\"user-edit-name\">" +
                     $(this).data("name") +
                     "</td><td class=\"user-edit-email\">" +
@@ -444,6 +445,13 @@ $(document).ready(function () {
                     "<td><div class=\"delete-user\"><i class=\"fa fa-trash\"></i></div></td></tr>";
             });
             $("#table-edit tbody").html(tblBody);
+            
+            var el = document.getElementById('table-edit-tbody');
+            var sortable = Sortable.create(el, {
+                handle: ".user-sort",
+                animation: 150
+            });
+            
             $("#editEntry").modal();
 
             // enable all controls
