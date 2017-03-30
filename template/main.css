@@ -3,7 +3,7 @@ html {
     min-height: 100%;
 }
 body {
-    margin-top:25px;
+    margin-top:80px;
     margin-bottom: 80px;
 }
 table.table-shifts {
@@ -58,7 +58,7 @@ td.td-user {
 .tr-debug {
     display:none;
 }
-.form-control {
+.modal .form-control {
     margin-top:5px;
     margin-bottom:15px;
 }

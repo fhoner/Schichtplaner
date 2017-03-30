@@ -13,6 +13,13 @@ $tpl->insert("organisation", ORGANISATION);
 $tpl->insert("loggedIn", isset($_SESSION['user']) ? "true" : "false");
 $tpl->insert("username", isset($_SESSION['userData']) ? $_SESSION['userData']['name'] : "");
 
+// handle login controls in frontend
+if (isset($_SESSION['user'])) {
+    $tpl->insert("login-input-visible", 'style="display:none;"');
+} else {
+    $tpl->insert("logout-input-visible", 'style="display:none;"');
+}
+
 // iterate plans
 foreach(dbConn::query("SELECT *, IF(editable > CURRENT_TIMESTAMP, 1, 0) AS editable FROM :prefix:plan 
                        WHERE deleted = 0 AND public > CURRENT_TIMESTAMP ORDER BY position ASC") as $pl)
@@ -228,8 +235,6 @@ foreach(dbConn::query("SELECT *, IF(editable > CURRENT_TIMESTAMP, 1, 0) AS edita
 
     $tpl->insert("plansContent", $tabContent->getOutput());
 }
-
-
 
 // insert page request duration
 $diff = microtime() - $start;

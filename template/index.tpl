@@ -11,13 +11,41 @@
 </head>
 
 <body>
+    <div class="navbar navbar-default navbar-fixed-top">
+        <div class="container">
+            <div class="navbar-header">
+                <button class="navbar-toggle" type="button" data-toggle="collapse" data-target="#navbar-main">
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                </button>
+                <a class="navbar-brand" href="#">Schichtplaner</a>
+            </div>
+            <center>
+                <div class="navbar-collapse collapse" id="navbar-main">
+                    <form class="navbar-form navbar-right" role="search" id="loginForm">
+                        <span id="loggedInAs" ${logout-input-visible}$>Angemeldet als: <strong>ausschuss</strong></span>
+                        <div class="form-group login-input" ${login-input-visible}$>
+                            <input type="text" class="form-control" name="loginUsername" id="loginUsername" placeholder="Benutzername">
+                        </div>
+                        <div class="form-group login-input" ${login-input-visible}$>
+                            <input type="password" class="form-control" name="password" id="loginPassword" placeholder="Passwort">
+                        </div>
+                        <button class="btn btn-default" id="loginButton" ${login-input-visible}$>
+                            <i class="fa fa-sign-in" aria-hidden="true"></i> Anmelden
+                        </button>
+                        <button class="btn btn-default" id="logoutButton" ${logout-input-visible}$>
+                            <i class="fa fa-sign-out" aria-hidden="true"></i> Abmelden
+                        </button>
+                    </form>
+                </div>
+            </center>
+        </div>
+    </div>
+
+
     <div style="width: 100%; text-align:right;">
-        <button class="btn btn-secondary" style="margin: 25px;" id="loginButton">
-            <i class="fa fa-sign-in" aria-hidden="true"></i> Einloggen
-        </button>
-        <button class="btn btn-secondary" style="margin: 25px; display:none;" id="logoutButton">
-            <i class="fa fa-sign-out" aria-hidden="true"></i> Ausloggen (<strong>${username}$</strong>)
-        </button>
+        
     </div>
 
     <ul class="nav nav-tabs" role="tablist" style="margin:10px;">
@@ -85,44 +113,9 @@
         </div>
     </div>
 
-    <!-- Login Modal -->
-    <form id="loginForm">
-    <div class="modal fade" tabindex="-1" role="dialog" id="loginModal">
-        <div class="modal-dialog">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                            <span aria-hidden="true">&times;</span>
-                        </button>
-                    <h4 class="modal-title">Einloggen</h4>
-                </div>
-                <div class="modal-body">
-                    Geben Sie Ihre Anmeldedaten ein.<br><br>
-                    <div class="form-group">
-                        <label for="loginUsername">Benutzername</label>
-                        <input type="text" class="form-control" id="loginUsername">
-                    </div>
-                    <div class="form-group">
-                        <label for="loginPassword">Passwort</label>
-                        <input type="password" class="form-control" id="loginPassword">
-                    </div>
-                    <div id="loginResult"></div>
-                </div>
-                <div class="modal-footer">
-                    <img src="template/loading.gif" alt="loading-animation" id="loginProcessingIcon" />
-                    <button type="button" class="btn btn-default" data-dismiss="modal">Abbrechen</button>
-                    <button type="submit" class="btn btn-primary" id="loginSubmitButton">
-                        Einloggen
-                    </button>
-                </div>
-            </div>
-        </div>
-    </div>
-    </form>
-
     <div style="clear:both;"></div>
     <footer class="footer">
-        <p class="text-muted"><small>v1.0 &copy; 2016 Felix Honer, MV Öschelbronn e.V.</small></p>
+        <p class="text-muted"><small>v0.9b &copy; 2017 Felix Honer</small></p>
     </footer>
 
 </body>

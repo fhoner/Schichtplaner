@@ -11,10 +11,8 @@ var planname = "${name}$";  // can change when user renames the plan; so use js 
 var isLoggedIn = false; // boolean whether user is logged in or not
 
 function login() {
-    $("#loginModal").find("input, button").prop("disabled", true);
-    $("#loginResult").hide();
-    $("#loginProcessingIcon").show();
-
+    $(".login-input").find("input, button").prop("disabled", true);
+    $("#loginButton").prop("disabled", true);
     setTimeout(function() {
         $.ajax({
             url: "ajax.login.php",
@@ -27,16 +25,18 @@ function login() {
                 res = JSON.parse(res);
                 if (res.success) {
                     setIsLoggedIn(true);
-                    $("#loginModal").modal("hide");
-                    $("body").stop().hide().fadeIn("fast");
-                    $("#logoutButton").html('<i class="fa fa-sign-out" aria-hidden="true"></i>Ausloggen (<strong>' + res.username + '</strong>)');
+                    $("body").stop().hide().fadeIn();
+                    $("#logoutButton").html('<i class="fa fa-sign-out" aria-hidden="true"></i>Abmelden');
+                    $("#loggedInAs").find("strong").html(res.username);
+                    $(".login-input").hide();
                 } else {
                     setIsLoggedIn(false);
-                    $("#loginResult").html('<div class="alert alert-danger">' + res.message + '</div>').show();
+                    bootbox.alert('<strong>Anmeldung fehlgeschlagen</strong><br><br><p>' + res.message + '</p>');
+                    $("#loginUsername, #loginPassword").val('');
                 }
 
-                $("#loginModal").find("input, button").prop("disabled", false);
-                $("#loginProcessingIcon").hide();
+                $(".login-input").find("input, button").prop("disabled", false);
+                $("#loginButton").prop("disabled", false);
             }
         });
     }, 250);
@@ -47,12 +47,14 @@ function setIsLoggedIn(loggedIn) {
 
     if (isLoggedIn) {
         $(".td-user").css("cursor", "pointer");
-        $("#loginButton").hide();
+        $("#loginButton, .login-input").hide();
         $("#logoutButton").show();
+        $("#loggedInAs").show();
     } else {
         $(".td-user").css("cursor", "auto");
         $("#logoutButton").hide();
-        $("#loginButton").show();
+        $("#loginButton, .login-input").show();
+        $("#loggedInAs").hide();
     }
 }
 
@@ -280,7 +282,6 @@ $(document).ready(function () {
 
             $("input[type=checkbox]").data("on-text", "Ja");
             $("input[type=checkbox]").data("off-text", "Nein");
-            $("input[type=checkbox]").data("size", "small");
             $("input[type=checkbox]").bootstrapSwitch();
 
             if (max <= $("#table-edit tbody tr").length)
