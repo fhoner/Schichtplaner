@@ -10,6 +10,7 @@
     "sortablejs": "^1.5.1",
     "bootstrap": "^3.3.7",
     "bootstrap-switch": "^3.3.2",
+    "magic-input": "*",
     "bootstrap-datepicker": "git://github.com/uxsolutions/bootstrap-datepicker.git",
     "mindmup-editable": "git://github.com/fhoner/editable-table.git",
     "bootbox": "^4.4.0",

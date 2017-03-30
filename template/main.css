@@ -22,6 +22,11 @@ td.td-time {
     height:70px;
     white-space:normal !important;
 }
+td.user-edit-is-fixed-td label {
+    padding-top:3px !important;
+    padding-bottom:0px !important;
+    margin-bottom:0px !important;
+}
 #table-edit tr td {
     vertical-align: middle !important;
 }
