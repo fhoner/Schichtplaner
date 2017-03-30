@@ -190,17 +190,12 @@ $(document).ready(function () {
                 "<td class=\"user-edit-name\">" + escapeHtml($("#add-name").val()) +
                 "</td><td class=\"user-edit-email\">" + escapeHtml($("#add-email").val()) + "</td>" +
                 "<td class=\"readonly user-edit-is-fixed-td\" style=\"text-align:center;\">" +
-                "<input type=\"checkbox\" class=\"user-edit-is-fixed\" checked></td>" +
+                "<input type=\"checkbox\" class=\"mgc-switch mgc-sm user-edit-is-fixed\" checked></td>" +
                 "<td class=\"tr-debug user-edit-action\">create</td>" +
                 "<td><div class=\"delete-user\"><i class=\"fa fa-trash\"></i></div></td></tr>");
             $("#add-name").val("");
             $("#add-email").val("");
             $('#table-edit').editableTableWidget();
-
-            $("input[type=checkbox]").data("on-text", "Ja");
-            $("input[type=checkbox]").data("off-text", "Nein");
-            $("input[type=checkbox]").data("size", "small");
-            $("input[type=checkbox]").bootstrapSwitch();
 
             if (max <= $("#table-edit tbody tr").length)
                 $(".add-worker").prop("disabled", "disabled");
@@ -356,9 +351,9 @@ $(document).ready(function () {
                     $(this).data("name") +
                     "</td><td class=\"user-edit-email\">" +
                     $(this).data("email") + "</td>" +
-                    "<td class=\"readonly user-edit-is-fixed-td\" style=\"text-align:center;\">" +
-                    "<input type=\"checkbox\" class=\"user-edit-is-fixed\" " +
-                    ($(this).hasClass("not-fixed") ? "" : "checked") + "></td>" +
+                    "<td class=\"readonly user-edit-is-fixed-td\">" +
+                    "<label><input type=\"checkbox\" class=\"mgc-switch mgc-sm user-edit-is-fixed\" " +
+                    ($(this).hasClass("not-fixed") ? "" : "checked") + "></label></td>" +
                     "<td class=\"tr-debug user-edit-action\">update</td>" +
                     "<td><div class=\"delete-user\"><i class=\"fa fa-trash\"></i></div></td></tr>";
             });
@@ -387,12 +382,6 @@ $(document).ready(function () {
             if (max <= $(this).find(".worker").length) {
                 $(".add-worker").prop("disabled", true);
             }
-
-            // enable bootstrap switch plugin
-            $("input[type=checkbox]").data("on-text", "Ja");
-            $("input[type=checkbox]").data("off-text", "Nein");
-            $("input[type=checkbox]").data("size", "small");
-            $("input[type=checkbox]").bootstrapSwitch();
         });
 
     $('#editEntry').on('hidden.bs.modal', function () {
