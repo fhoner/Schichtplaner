@@ -25,6 +25,7 @@
             <div id="navbar" class="navbar-collapse collapse">
                 <ul class="nav navbar-nav">
                 <li class="${homeActive}$"><a href="${${url}$}$/admin/index.php?v=dashboard">Home</a></li>
+                <li class="${userActive}$"><a href="${${url}$}$/admin/index.php?v=users">Benutzer</a></li>
                 <li class="dropdown">
                     <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">
                         Pläne <span class="caret"></span>

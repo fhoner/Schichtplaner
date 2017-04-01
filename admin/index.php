@@ -5,8 +5,6 @@ require("../functions.php");
 
 $tpl = new template("admin/index");
 
-$tpl->insert("homeActive", isset($_GET['v']) ? "": "active");
-
 // plans in navigation
 foreach(dbConn::query("SELECT * FROM :prefix:plan WHERE deleted = 0 ORDER BY created DESC") as $r)
 {

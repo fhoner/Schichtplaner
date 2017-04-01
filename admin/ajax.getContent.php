@@ -48,6 +48,15 @@ switch($_POST['v'])
         $output .= getHistory(5);        
         echo $output;
         break;
+
+    case "users":
+        $tpl = new template("admin/users");
+        foreach (dbConn::query("SELECT * FROM :prefix:user ORDER BY name ASC") as $r) {
+            $tpl->insert("users", template::create("admin/user.row", array("name" => $r['name'])));
+        }
+        $tpl->removeVariables();
+        echo $tpl->getOutput();
+        break;
         
     case "plan":
         $plan = dbConn::queryRow("SELECT * FROM :prefix:plan WHERE name = :0 AND deleted = 0 ORDER BY created DESC", $_POST['p']);

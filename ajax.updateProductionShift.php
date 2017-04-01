@@ -5,7 +5,7 @@ require("functions.php");
 require("transaction.php");
 
 session_start();
-if (!isset($_SESSION['user'])) {
+if (!isLoggedin()) {
     die(json_encode(array(
         "result"    => "ERROR",
         "message"   => "Unauthentifizierter Benutzer"

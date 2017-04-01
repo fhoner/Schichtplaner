@@ -187,4 +187,13 @@ function seoUrl($string) {
     return $string;
 }
 
+function isLoggedin() {
+    if (!isset($_SESSION['user']) || !isset($_SESSION['userData']))
+        return false;
+
+    $userdb = dbConn::queryRow("SELECT * FROM :prefix:user WHERE name = :0", $_SESSION['user']);
+    $logout = $userdb == null || $_SESSION['userData']['lastchange'] != $userdb['lastchange'];
+    return isset($_SESSION['user']) && !$logout;
+}
+
 ?>

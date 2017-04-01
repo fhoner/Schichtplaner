@@ -15,7 +15,8 @@
     "mindmup-editable": "git://github.com/fhoner/editable-table.git",
     "bootbox": "^4.4.0",
     "font-awesome": "^4.7.0",
-    "bootstrapFormHelpers": "git://github.com/winmarkltd/BootstrapFormHelpers.git"
+    "bootstrapFormHelpers": "git://github.com/winmarkltd/BootstrapFormHelpers.git",
+    "izitoast": "^1.0.0"
   },
   "license": "UNLICENSED",
   "devDependencies": {

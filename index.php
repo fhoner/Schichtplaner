@@ -10,14 +10,14 @@ $count = 0;
 $first = true;
 $tpl = new template("index");
 $tpl->insert("organisation", ORGANISATION);
-$tpl->insert("loggedIn", isset($_SESSION['user']) ? "true" : "false");
 $tpl->insert("username", isset($_SESSION['userData']) ? $_SESSION['userData']['name'] : "");
 
-// handle login controls in frontend
-if (isset($_SESSION['user'])) {
+if (isLoggedin()) {
     $tpl->insert("login-input-visible", 'style="display:none;"');
+    $tpl->insert("loggedIn", "true");
 } else {
     $tpl->insert("logout-input-visible", 'style="display:none;"');
+    $tpl->insert("loggedIn", "false");
 }
 
 // iterate plans

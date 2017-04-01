@@ -34,7 +34,8 @@ $dbResultCount = dbConn::querySingle("SELECT COUNT(*) FROM :prefix:user WHERE na
 if ($dbResultCount < 1) {
 	showFailure();
 } else {
-    $_SESSION['user'] = $user['userId'];
+	dbConn::execute("UPDATE :prefix:user SET lastlogin = CURRENT_TIMESTAMP WHERE name = :0", $user['name']);
+    $_SESSION['user'] = $user['name'];
     $_SESSION['userData'] = $user;
     die(json_encode(array(
 	        "success"   => true,

@@ -7,6 +7,26 @@
 var planname = null;
 $.fn.datepicker.defaults.format = "dd.mm.yyyy";
 
+var Notify = function() {}
+Notify.success = function(title, message) {
+    iziToast.success({
+        title: title,
+        message: message
+    });
+}
+Notify.info = function(title, message) {
+    iziToast.warning({
+        title: title,
+        message: message
+    });
+}
+Notify.error = function(title, message) {
+    iziToast.error({
+        title: title,
+        message: message
+    });
+}
+
 function copyToClipboard(element) {
     var $temp = $("<input>")
     $("body").append($temp);
@@ -49,12 +69,17 @@ function loadContent() {
             data: getQueryStrings(),
             success: function (result) {
                 placeContent(result);
+                addHandlers();
             }
         });
 
         var hash = window.location.hash;
         hash && $('ul.nav a[href="' + hash + '"]').tab('show');
     }, 200);
+}
+
+function addHandlers() {
+    $('[data-toggle="tooltip"]').tooltip();
 }
 
 function show(title, message) {
@@ -119,6 +144,12 @@ $(document).ready(function () {
         if ($(this).parent().hasClass("nav-plan")) {
             $(this).parent().parent().parent().addClass("active");
         }
+    });
+
+    iziToast.settings({
+        timeout: 5000,
+        resetOnHover: false,
+        position: 'topRight'
     });
 
     loadContent();
