@@ -3,7 +3,7 @@
 -- http://www.phpmyadmin.net
 --
 -- Host: localhost:3306
--- Erstellungszeit: 18. Mrz 2017 um 16:32
+-- Erstellungszeit: 02. Apr 2017 um 01:37
 -- Server-Version: 5.5.42
 -- PHP-Version: 7.0.0
 
@@ -54,9 +54,9 @@ CREATE TABLE `planer_plan` (
 -- Daten für Tabelle `planer_plan`
 --
 
-INSERT INTO `planer_plan` (`name`, `public`, `editable`, `created`, `deleted`) VALUES
-('Donnerstag', '2020-01-20 16:00:00', '2030-01-20 16:00:00', '2016-01-20 23:00:00', 0),
-('Mittwoch', '2020-02-20 20:00:00', '2020-02-20 20:00:00', '2016-01-23 14:52:40', 0);
+INSERT INTO `planer_plan` (`name`, `public`, `editable`, `position`, `created`, `deleted`) VALUES
+('Donnerstag 2016', '2020-01-01 01:34:27', '2020-01-20 01:34:27', 1, '2016-01-20 23:00:00', 0),
+('Mittwoch 2016', '2020-01-01 21:22:23', '2016-02-20 21:22:23', 0, '2016-01-23 14:52:40', 0);
 
 -- --------------------------------------------------------
 
@@ -77,22 +77,22 @@ CREATE TABLE `planer_production` (
 --
 
 INSERT INTO `planer_production` (`name`, `plan`, `masterName`, `masterEmail`, `position`) VALUES
-('Bar', 'Donnerstag', NULL, NULL, 10),
-('Bier', 'Donnerstag', NULL, NULL, 0),
-('Bier', 'Mittwoch', 'Dominik Honer', 'dhoner@web.de', 0),
-('Eingang', 'Mittwoch', NULL, NULL, 0),
-('Essen', 'Donnerstag', NULL, NULL, 4),
-('Geschirr-Mobil', 'Mittwoch', NULL, NULL, 0),
-('Geschirrmobil', 'Donnerstag', NULL, NULL, 3),
-('Kaffee/Kuchen', 'Donnerstag', NULL, NULL, 6),
-('Kasse', 'Donnerstag', NULL, NULL, 0),
-('Kasse', 'Mittwoch', 'Thorsten Marohn', 'tmarohn@gmx.de', 0),
-('Pommes', 'Donnerstag', NULL, NULL, 0),
-('Pommes', 'Mittwoch', NULL, NULL, 0),
-('Steak / Rote', 'Donnerstag', NULL, NULL, 1),
-('Steak / Rote', 'Mittwoch', NULL, NULL, 0),
-('Wein / Alkfrei', 'Donnerstag', NULL, NULL, 2),
-('Wein / Alkfrei', 'Mittwoch', NULL, NULL, 0);
+('Bar', 'Donnerstag 2016', 'Ralf Papst', 'stellv.vorsitz@mv-oeschelbronn.de', 10),
+('Bier', 'Donnerstag 2016', 'Maximilian Moench', 'stellv.vorsitz@mv-oeschelbronn.de', 0),
+('Bier', 'Mittwoch 2016', 'Felix Honer', 'privat@felix-honer.com', 0),
+('Eingang', 'Mittwoch 2016', NULL, NULL, 0),
+('Essen', 'Donnerstag 2016', 'Frank Werner', 'schrift@mv-oeschelbronn.de', 4),
+('Geschirr-Mobil', 'Mittwoch 2016', 'Felix Honer', 'privat@felix-honer.com', 0),
+('Geschirrmobil', 'Donnerstag 2016', 'Rene Wurfel', 'stellv.vorsitz@mv-oeschelbronn.de', 3),
+('Kaffee/Kuchen', 'Donnerstag 2016', NULL, NULL, 6),
+('Kasse', 'Donnerstag 2016', 'Stefan Biermann', '1.vorsitzender@mv-oeschelbronn.de', 0),
+('Kasse', 'Mittwoch 2016', 'Felix Honer', 'privat@felix-honer.com', 0),
+('Pommes', 'Donnerstag 2016', 'Frank Werner', 'schrift@mv-oeschelbronn.de', 0),
+('Pommes', 'Mittwoch 2016', 'Felix Honer', 'privat@felix-honer.com', 0),
+('Steak / Rote', 'Donnerstag 2016', 'Frank Werner', 'schrift@mv-oeschelbronn.de', 1),
+('Steak / Rote', 'Mittwoch 2016', 'Felix Honer', 'privat@felix-honer.com', 0),
+('Wein / Alkfrei', 'Donnerstag 2016', 'Kathrin Baier', 'stellv.vorsitz@mv-oeschelbronn.de', 2),
+('Wein / Alkfrei', 'Mittwoch 2016', 'Felix Honer', 'privat@felix-honer.com', 0);
 
 -- --------------------------------------------------------
 
@@ -112,38 +112,38 @@ CREATE TABLE `planer_production_shift` (
 -- Daten für Tabelle `planer_production_shift`
 --
 
-INSERT INTO `planer_production_shift` (`production`, `shift`, `plan`, `required`) VALUES
-('Bar', 5, 'Donnerstag', 4),
-('Bar', 6, 'Donnerstag', 8),
-('Bar', 7, 'Donnerstag', 2),
-('Bier', 1, 'Donnerstag', 4),
-('Bier', 2, 'Donnerstag', 5),
-('Bier', 3, 'Donnerstag', 4),
-('Bier', 18, 'Mittwoch', 4),
-('Eingang', 18, 'Mittwoch', 2),
-('Essen', 9, 'Donnerstag', 4),
-('Essen', 10, 'Donnerstag', 1),
-('Geschirr-Mobil', 18, 'Mittwoch', 2),
-('Geschirrmobil', 1, 'Donnerstag', 3),
-('Geschirrmobil', 2, 'Donnerstag', 3),
-('Geschirrmobil', 3, 'Donnerstag', 3),
-('Kaffee/Kuchen', 8, 'Donnerstag', 4),
-('Kasse', 1, 'Donnerstag', 4),
-('Kasse', 2, 'Donnerstag', 4),
-('Kasse', 3, 'Donnerstag', 4),
-('Kasse', 18, 'Mittwoch', 4),
-('Pommes', 1, 'Donnerstag', 3),
-('Pommes', 2, 'Donnerstag', 3),
-('Pommes', 3, 'Donnerstag', 3),
-('Pommes', 18, 'Mittwoch', 2),
-('Steak / Rote', 1, 'Donnerstag', 4),
-('Steak / Rote', 2, 'Donnerstag', 4),
-('Steak / Rote', 3, 'Donnerstag', 3),
-('Steak / Rote', 18, 'Mittwoch', 4),
-('Wein / Alkfrei', 1, 'Donnerstag', 2),
-('Wein / Alkfrei', 2, 'Donnerstag', 3),
-('Wein / Alkfrei', 3, 'Donnerstag', 2),
-('Wein / Alkfrei', 18, 'Mittwoch', 2);
+INSERT INTO `planer_production_shift` (`production`, `shift`, `plan`, `required`, `comment`) VALUES
+('Bar', 5, 'Donnerstag 2016', 3, ''),
+('Bar', 6, 'Donnerstag 2016', 8, ''),
+('Bar', 7, 'Donnerstag 2016', 2, ''),
+('Bier', 1, 'Donnerstag 2016', 4, ''),
+('Bier', 2, 'Donnerstag 2016', 5, ''),
+('Bier', 3, 'Donnerstag 2016', 4, ''),
+('Bier', 18, 'Mittwoch 2016', 4, ''),
+('Eingang', 18, 'Mittwoch 2016', 2, ''),
+('Essen', 9, 'Donnerstag 2016', 5, ''),
+('Essen', 10, 'Donnerstag 2016', 1, ''),
+('Geschirr-Mobil', 18, 'Mittwoch 2016', 3, ''),
+('Geschirrmobil', 1, 'Donnerstag 2016', 4, ''),
+('Geschirrmobil', 2, 'Donnerstag 2016', 4, ''),
+('Geschirrmobil', 3, 'Donnerstag 2016', 4, ''),
+('Kaffee/Kuchen', 8, 'Donnerstag 2016', 4, ''),
+('Kasse', 1, 'Donnerstag 2016', 12, ''),
+('Kasse', 2, 'Donnerstag 2016', 4, ''),
+('Kasse', 3, 'Donnerstag 2016', 4, ''),
+('Kasse', 18, 'Mittwoch 2016', 4, ''),
+('Pommes', 1, 'Donnerstag 2016', 3, ''),
+('Pommes', 2, 'Donnerstag 2016', 3, ''),
+('Pommes', 3, 'Donnerstag 2016', 3, ''),
+('Pommes', 18, 'Mittwoch 2016', 2, ''),
+('Steak / Rote', 1, 'Donnerstag 2016', 4, ''),
+('Steak / Rote', 2, 'Donnerstag 2016', 4, ''),
+('Steak / Rote', 3, 'Donnerstag 2016', 3, ''),
+('Steak / Rote', 18, 'Mittwoch 2016', 4, ''),
+('Wein / Alkfrei', 1, 'Donnerstag 2016', 2, ''),
+('Wein / Alkfrei', 2, 'Donnerstag 2016', 3, ''),
+('Wein / Alkfrei', 3, 'Donnerstag 2016', 2, ''),
+('Wein / Alkfrei', 18, 'Mittwoch 2016', 2, '');
 
 -- --------------------------------------------------------
 
@@ -156,23 +156,44 @@ CREATE TABLE `planer_shift` (
   `plan` varchar(100) NOT NULL,
   `fromDate` time NOT NULL,
   `toDate` time NOT NULL
-) ENGINE=InnoDB AUTO_INCREMENT=19 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=40 DEFAULT CHARSET=latin1;
 
 --
 -- Daten für Tabelle `planer_shift`
 --
 
 INSERT INTO `planer_shift` (`shiftId`, `plan`, `fromDate`, `toDate`) VALUES
-(1, 'Donnerstag', '09:30:00', '14:00:00'),
-(9, 'Donnerstag', '10:30:00', '15:00:00'),
-(8, 'Donnerstag', '12:00:00', '17:00:00'),
-(5, 'Donnerstag', '12:00:00', '17:30:00'),
-(2, 'Donnerstag', '14:00:00', '18:30:00'),
-(10, 'Donnerstag', '15:00:00', '16:00:00'),
-(7, 'Donnerstag', '16:00:00', '20:30:00'),
-(6, 'Donnerstag', '17:30:00', '23:45:00'),
-(3, 'Donnerstag', '18:30:00', '23:45:00'),
-(18, 'Mittwoch', '17:30:00', '23:00:00');
+(1, 'Donnerstag 2016', '09:30:00', '14:00:00'),
+(9, 'Donnerstag 2016', '10:30:00', '15:00:00'),
+(8, 'Donnerstag 2016', '12:00:00', '17:00:00'),
+(5, 'Donnerstag 2016', '12:00:00', '17:30:00'),
+(2, 'Donnerstag 2016', '14:00:00', '18:30:00'),
+(10, 'Donnerstag 2016', '15:00:00', '16:00:00'),
+(7, 'Donnerstag 2016', '15:00:00', '19:00:00'),
+(6, 'Donnerstag 2016', '17:30:00', '00:30:00'),
+(3, 'Donnerstag 2016', '18:30:00', '23:45:00'),
+(18, 'Mittwoch 2016', '17:30:00', '23:00:00');
+
+-- --------------------------------------------------------
+
+--
+-- Tabellenstruktur für Tabelle `planer_user`
+--
+
+CREATE TABLE `planer_user` (
+  `name` varchar(25) NOT NULL,
+  `password` char(64) NOT NULL,
+  `salt` char(25) NOT NULL,
+  `lastchange` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  `lastlogin` timestamp NULL DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+--
+-- Daten für Tabelle `planer_user`
+--
+
+INSERT INTO `planer_user` (`name`, `password`, `salt`, `lastchange`, `lastlogin`) VALUES
+('user', '3e3e85fd583e0992a14e53bcf66c55b7aa5559e8450b3235309ff6110264f892', '6SsMLRPRmhntLlo7roamnny9p', '2017-04-01 23:33:26', '2017-04-01 23:33:34');
 
 -- --------------------------------------------------------
 
@@ -182,20 +203,26 @@ INSERT INTO `planer_shift` (`shiftId`, `plan`, `fromDate`, `toDate`) VALUES
 
 CREATE TABLE `planer_worker` (
   `name` varchar(100) NOT NULL,
-  `email` varchar(100) NOT NULL,
+  `email` varchar(100) DEFAULT NULL,
   `production` varchar(100) NOT NULL,
   `plan` varchar(100) NOT NULL,
   `shift` int(11) NOT NULL,
-  `isFixed` tinyint(1) NOT NULL DEFAULT 1
+  `isFixed` tinyint(1) NOT NULL DEFAULT '1',
+  `position` int(11) NOT NULL DEFAULT '500'
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 --
 -- Daten für Tabelle `planer_worker`
 --
 
-INSERT INTO `planer_worker` (`name`, `email`, `production`, `plan`, `shift`) VALUES
-('Moritz Mauch', 'asd2@asd.de', 'Bier', 'Mittwoch', 18),
-('Peter Pressel', 'asd@asd.de', 'Bier', 'Mittwoch', 18);
+INSERT INTO `planer_worker` (`name`, `email`, `production`, `plan`, `shift`, `isFixed`, `position`) VALUES
+('Angelika Ackermann', 'asd@asd.de', 'Pommes', 'Donnerstag 2016', 2, 0, 1),
+('asd asd', 'asd@asd.de', 'Eingang', 'Mittwoch 2016', 18, 1, 500),
+('Barbara Sankt', 'asd@asd.de', 'Wein / Alkfrei', 'Donnerstag 2016', 1, 1, 500),
+('Franziska Metzger', 'asd@asd.de', 'Pommes', 'Donnerstag 2016', 2, 0, 2),
+('Kathrin Traugott', 'asd@asd.de', 'Pommes', 'Donnerstag 2016', 2, 1, 0),
+('Lena Abt', 'labt@icloud.com', 'Bier', 'Donnerstag 2016', 1, 1, 1),
+('Matthias Theissen', 'mtheissen@gmail.com', 'Bier', 'Donnerstag 2016', 1, 1, 0);
 
 --
 -- Trigger `planer_worker`
@@ -207,6 +234,8 @@ CREATE TRIGGER `Worker_History_Delete` AFTER DELETE ON `planer_worker`
          nameAfter, 
          emailBefore,
          emailAfter,
+     	 isFixedBefore,
+     	 isFixedAfter,
          production,
          plan,
          shift,
@@ -216,6 +245,8 @@ CREATE TRIGGER `Worker_History_Delete` AFTER DELETE ON `planer_worker`
          null,
          old.email,
          null,
+     	 old.isFixed,
+     	 null,
          old.production,
          old.plan,
          old.shift,
@@ -229,6 +260,8 @@ CREATE TRIGGER `Worker_History_Insert` AFTER INSERT ON `planer_worker`
          nameAfter, 
          emailBefore,
          emailAfter,
+     	 isFixedBefore,
+      	 isFixedAfter,
          production,
          plan,
          shift,
@@ -238,6 +271,8 @@ CREATE TRIGGER `Worker_History_Insert` AFTER INSERT ON `planer_worker`
          new.name,
          null,
          new.email,
+     	 null,
+     	 new.isFixed,
          new.production,
          new.plan,
          new.shift,
@@ -247,13 +282,16 @@ DELIMITER ;
 DELIMITER $$
 CREATE TRIGGER `Worker_History_Update` AFTER UPDATE ON `planer_worker`
  FOR EACH ROW IF NEW.name != OLD.name OR
-  NEW.email != OLD.email
+  NEW.email != OLD.email OR
+  NEW.isFixed != OLD.isFixed
 THEN
 INSERT INTO planer_worker_history 
     (nameBefore, 
          nameAfter, 
          emailBefore,
          emailAfter,
+     	 isFixedBefore,
+         isFixedAfter,
          production,
          plan,
          shift,
@@ -261,8 +299,12 @@ INSERT INTO planer_worker_history
   VALUES
     (old.name,
          new.name,
+
          old.email,
          new.email,
+
+     	 old.isFixed,
+     	 new.isFixed,
          new.production,
          new.plan,
          new.shift,
@@ -283,12 +325,29 @@ CREATE TABLE `planer_worker_history` (
   `nameAfter` varchar(100) DEFAULT NULL,
   `emailBefore` varchar(100) DEFAULT NULL,
   `emailAfter` varchar(100) DEFAULT NULL,
+  `isFixedBefore` tinyint(1) DEFAULT NULL,
+  `isFixedAfter` tinyint(1) DEFAULT NULL,
   `production` varchar(100) NOT NULL,
   `plan` varchar(100) NOT NULL,
   `shift` int(11) NOT NULL,
   `action` varchar(25) NOT NULL,
   `created` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP
-) ENGINE=InnoDB AUTO_INCREMENT=62 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=622 DEFAULT CHARSET=latin1;
+
+--
+-- Daten für Tabelle `planer_worker_history`
+--
+
+INSERT INTO `planer_worker_history` (`historyId`, `nameBefore`, `nameAfter`, `emailBefore`, `emailAfter`, `isFixedBefore`, `isFixedAfter`, `production`, `plan`, `shift`, `action`, `created`) VALUES
+(613, NULL, 'Matthias Theissen', NULL, 'mtheissen@gmail.com', NULL, 1, 'Bier', 'Donnerstag 2016', 1, 'insert', '2017-01-22 15:12:22'),
+(614, NULL, 'Lena Abt', NULL, 'labt@icloud.com', NULL, 1, 'Bier', 'Donnerstag 2016', 1, 'insert', '2017-01-22 15:12:22'),
+(615, NULL, 'Franziska Metzger', NULL, 'asd@asd.de', NULL, 1, 'Pommes', 'Donnerstag 2016', 2, 'insert', '2017-01-22 15:14:15'),
+(616, NULL, 'Kathrin Traugott', NULL, 'asd@asd.de', NULL, 1, 'Pommes', 'Donnerstag 2016', 2, 'insert', '2017-01-22 15:14:15'),
+(617, NULL, 'Angelika Ackermann', NULL, 'asd@asd.de', NULL, 1, 'Pommes', 'Donnerstag 2016', 2, 'insert', '2017-01-22 15:14:15'),
+(618, NULL, 'Barbara Sankt', NULL, 'asd@asd.de', NULL, 1, 'Wein / Alkfrei', 'Donnerstag 2016', 1, 'insert', '2017-01-22 15:14:24'),
+(619, NULL, 'asd asd', NULL, 'asd@asd.de', NULL, 1, 'Eingang', 'Mittwoch 2016', 18, 'insert', '2017-01-23 18:35:16'),
+(620, 'Franziska Metzger', 'Franziska Metzger', 'asd@asd.de', 'asd@asd.de', 1, 0, 'Pommes', 'Donnerstag 2016', 2, 'update', '2017-03-30 23:41:47'),
+(621, 'Angelika Ackermann', 'Angelika Ackermann', 'asd@asd.de', 'asd@asd.de', 1, 0, 'Pommes', 'Donnerstag 2016', 2, 'update', '2017-03-30 23:47:44');
 
 --
 -- Trigger `planer_worker_history`
@@ -347,6 +406,13 @@ ALTER TABLE `planer_shift`
   ADD KEY `plan` (`plan`);
 
 --
+-- Indizes für die Tabelle `planer_user`
+--
+ALTER TABLE `planer_user`
+  ADD PRIMARY KEY (`name`),
+  ADD UNIQUE KEY `name` (`name`);
+
+--
 -- Indizes für die Tabelle `planer_worker`
 --
 ALTER TABLE `planer_worker`
@@ -376,12 +442,12 @@ ALTER TABLE `planer_worker_history`
 -- AUTO_INCREMENT für Tabelle `planer_shift`
 --
 ALTER TABLE `planer_shift`
-  MODIFY `shiftId` int(11) NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=19;
+  MODIFY `shiftId` int(11) NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=40;
 --
 -- AUTO_INCREMENT für Tabelle `planer_worker_history`
 --
 ALTER TABLE `planer_worker_history`
-  MODIFY `historyId` int(11) NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=62;
+  MODIFY `historyId` int(11) NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=622;
 --
 -- Constraints der exportierten Tabellen
 --
@@ -428,5 +494,5 @@ ALTER TABLE `planer_worker`
 -- Constraints der Tabelle `planer_worker_history`
 --
 ALTER TABLE `planer_worker_history`
-  ADD CONSTRAINT `fk_whistory_shift` FOREIGN KEY (`shift`) REFERENCES `planer_shift` (`shiftId`) ON DELETE CASCADE ON UPDATE CASCADE,
-  ADD CONSTRAINT `fk_whistory_production` FOREIGN KEY (`production`, `plan`) REFERENCES `planer_production` (`name`, `plan`) ON DELETE CASCADE ON UPDATE CASCADE;
+  ADD CONSTRAINT `fk_whistory_production` FOREIGN KEY (`production`, `plan`) REFERENCES `planer_production` (`name`, `plan`) ON DELETE CASCADE ON UPDATE CASCADE,
+  ADD CONSTRAINT `fk_whistory_shift` FOREIGN KEY (`shift`) REFERENCES `planer_shift` (`shiftId`) ON DELETE CASCADE ON UPDATE CASCADE;
