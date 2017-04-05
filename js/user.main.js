@@ -270,6 +270,7 @@ $(document).ready(function () {
         if (!err) {
             $("#table-edit tbody").append("<tr><td class=\"tr-debug user-edit-uid\">" + escapeHtml($("#add-name").val()) +
                 "\n" + escapeHtml($("#add-email").val()) + "</td>" +
+                "<td class=\"user-sort readonly\" tabindex=\"1\"><i class=\"fa fa-arrows\"></i></td>" +
                 "<td class=\"user-edit-name\">" + escapeHtml($("#add-name").val()) +
                 "</td><td class=\"user-edit-email\">" + escapeHtml($("#add-email").val()) + "</td>" +
                 "<td class=\"readonly user-edit-is-fixed-td\" style=\"text-align:center;\">" +
