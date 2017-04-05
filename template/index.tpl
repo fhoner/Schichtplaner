@@ -65,7 +65,14 @@
                         </button>
                     <h4 class="modal-title">{empty}</h4>
                 </div>
-                <div class="modal-body">
+                <div class="modal-body" id="editUserLoading">
+                    <div class="spinner">
+                        <div class="bounce1"></div>
+                        <div class="bounce2"></div>
+                        <div class="bounce3"></div>
+                    </div>
+                </div>
+                <div class="modal-body" id="editUserContent">
                     <strong>Hinweis: </strong>Durch Klicken in eine Zelle kann der jeweilige Eintrag bearbeitet werden.<br><br>
                     <table class="table table-condensed table-bordered" id="table-edit">
                         <thead>

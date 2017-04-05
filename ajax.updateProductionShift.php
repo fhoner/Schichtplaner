@@ -277,7 +277,7 @@ try
         $worker = new template("worker");
         $worker->insert("fixed", $r['isFixed'] ? "" : "not-fixed");
         $worker->insert("name", $r['name']);
-        $worker->insert("email", $r['email']);
+        $worker->insert("email", $r['email'] == null || $r['email'] == "" ? "" : "true");
         $html .= $worker->getOutput();
     }
     

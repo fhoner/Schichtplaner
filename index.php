@@ -54,6 +54,7 @@ foreach(dbConn::query("SELECT *, IF(editable > CURRENT_TIMESTAMP, 1, 0) AS edita
          foreach($values['productions'] as $p)
          {
             $mobile = new template("plan.table");
+            $mobile->insert("planName", $pl['name']);
             $mobile->insert("readonly", $isReadonly ? "plan-readonly" : "");
             $mobile->insert("tableCount", "12");
             
@@ -116,7 +117,7 @@ foreach(dbConn::query("SELECT *, IF(editable > CURRENT_TIMESTAMP, 1, 0) AS edita
                         $worker = new template("worker");
                         $worker->insert("fixed", $r['isFixed'] ? "" : "not-fixed");
                         $worker->insert("name", $r['name']);
-                        $worker->insert("email", $r['email']);
+                        $worker->insert("email", $r['email'] == null || $r['email'] == "" ? "" : "true");
                         $prodShift->insert("workers", $worker->getOutput());
                     }
                 }
@@ -137,6 +138,7 @@ foreach(dbConn::query("SELECT *, IF(editable > CURRENT_TIMESTAMP, 1, 0) AS edita
          */
          
         $planTpl = new template("plan.table");
+        $planTpl->insert("planName", $pl['name']);
         $planTpl->insert("readonly", $isReadonly ?  "plan-readonly" : "");
         $colSize = count($values['productions']);
         $nextColSize = 0;
@@ -218,7 +220,7 @@ foreach(dbConn::query("SELECT *, IF(editable > CURRENT_TIMESTAMP, 1, 0) AS edita
                     {
                         $worker = new template("worker");
                         $worker->insert("name", $r['name']);
-                        $worker->insert("email", $r['email']);
+                        $worker->insert("email", $r['email'] == null || $r['email'] == "" ? "" : "true");
                         $worker->insert("fixed", $r['isFixed'] ? "" : "not-fixed");
                         $prodShift->insert("workers", $worker->getOutput());
                     }
