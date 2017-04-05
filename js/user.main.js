@@ -414,6 +414,9 @@ $(document).ready(function () {
                     window.location.href + "?s=" + $(this).data("unique");
             history.pushState('data', '', newUrl);
 
+            $("#editUserLoading").show();
+            $("#editUserContent").hide();
+
             max = $(this).data("required");
             editObject = $(this);
             deletedArr = new Array();
@@ -427,55 +430,72 @@ $(document).ready(function () {
 
             $("#shift-comment").val($(this).find(".td-comment").text());
 
-            var tblBody = "";
-            $(this).find(".worker").each(function () {
-                tblBody += "<tr><td class=\"tr-debug user-edit-uid\">" + $(this).data("name") + "\n" +
-                    $(this).data("email") + "</td>" +
-                    "<td class=\"user-sort readonly\"><i class=\"fa fa-arrows\"></i></td>" +
-                    "<td class=\"user-edit-name\">" +
-                    $(this).data("name") +
-                    "</td><td class=\"user-edit-email\">" +
-                    $(this).data("email") + "</td>" +
-                    "<td class=\"readonly user-edit-is-fixed-td\">" +
-                    "<label><input type=\"checkbox\" class=\"mgc-switch mgc-sm user-edit-is-fixed\" " +
-                    ($(this).hasClass("not-fixed") ? "" : "checked") + "></label></td>" +
-                    "<td class=\"tr-debug user-edit-action\">update</td>" +
-                    "<td><div class=\"delete-user\"><i class=\"fa fa-trash\"></i></div></td></tr>";
-            });
-            $("#table-edit tbody").html(tblBody);
-            
-            var el = document.getElementById('table-edit-tbody');
-            var sortable = Sortable.create(el, {
-                handle: ".user-sort",
-                animation: 150
-            });
-            
             $("#editEntry").modal();
 
-            // enable all controls
-            $('#table-edit').editableTableWidget();
-            $(".add-worker").removeAttr("disabled");
-            $("#save-shift").prop("disabled", false);
-            $("#table-edit").find(".tr-delete-worker").show();
-            $('#table-edit').editableTableWidget();
-            $("#btn-add-user").prop("disabled", false);
-            $("#save-shift").prop("disabled", false);
+            $.ajax({
+                url: "ajax.getWorkers.php",
+                type: "POST",
+                data: {
+                    plan: editObject.closest("table").data("plan-name"),
+                    shiftId: editObject.data("shift-id"),
+                    production: editObject.data("shift-name")
+                },
+                success: function(res) {
+                    console.log(res);
 
-            if ($(this).closest("table").hasClass("plan-readonly")) {
-                $(".add-worker").prop("disabled", true);
-                $("#save-shift").prop("disabled", true);
-                $("#table-edit input").prop("disabled", true);
-                $("input[type=checkbox]").prop("readonly", true);
-                $("#table-edit").find(".tr-delete-worker").hide();  // hide delete icons
-                $("#table-edit").find(".delete-user").closest("td").remove();
-                $("#btn-add-user").prop("disabled", true);
-                $("#save-shift").prop("disabled", true);
+                    var tblBody = "";
+                    res.workers.forEach(function (el, index) {
+                        tblBody += "<tr><td class=\"tr-debug user-edit-uid\">" + el.name + "\n" +
+                            el.email + "</td>" +
+                            "<td class=\"user-sort readonly\"><i class=\"fa fa-arrows\"></i></td>" +
+                            "<td class=\"user-edit-name\">" +
+                            el.name +
+                            "</td><td class=\"user-edit-email\">" +
+                            el.email + "</td>" +
+                            "<td class=\"readonly user-edit-is-fixed-td\">" +
+                            "<label><input type=\"checkbox\" class=\"mgc-switch mgc-sm user-edit-is-fixed\" " +
+                            (el.isFixed ? "checked" : "") + "></label></td>" +
+                            "<td class=\"tr-debug user-edit-action\">update</td>" +
+                            "<td><div class=\"delete-user\"><i class=\"fa fa-trash\"></i></div></td></tr>";
+                    });
+                    $("#table-edit tbody").html(tblBody);
+                    
+                    var el = document.getElementById('table-edit-tbody');
+                    var sortable = Sortable.create(el, {
+                        handle: ".user-sort",
+                        animation: 150
+                    });
 
-                $("#table-edit tbody").find("td").addClass("readonly"); // make cells readonly
-            }
-            if (max <= $(this).find(".worker").length) {
-                $(".add-worker").prop("disabled", true);
-            }
+                    // enable all controls
+                    $('#table-edit').editableTableWidget();
+                    $(".add-worker").removeAttr("disabled");
+                    $("#save-shift").prop("disabled", false);
+                    $("#table-edit").find(".tr-delete-worker").show();
+                    $('#table-edit').editableTableWidget();
+                    $("#btn-add-user").prop("disabled", false);
+                    $("#save-shift").prop("disabled", false);
+
+                    if ($(editObject).closest("table").hasClass("plan-readonly")) {
+                        $(".add-worker").prop("disabled", true);
+                        $("#save-shift").prop("disabled", true);
+                        $("#table-edit input").prop("disabled", true);
+                        $("input[type=checkbox]").prop("readonly", true);
+                        $("#table-edit").find(".tr-delete-worker").hide();  // hide delete icons
+                        $("#table-edit").find(".delete-user").closest("td").remove();
+                        $("#btn-add-user").prop("disabled", true);
+                        $("#save-shift").prop("disabled", true);
+
+                        $("#table-edit tbody").find("td").addClass("readonly"); // make cells readonly
+                    }
+                    if (max <= $(editObject).find(".worker").length) {
+                        $(".add-worker").prop("disabled", true);
+                    }
+
+                    $("#editUserContent").show();
+                    $("#editUserLoading").hide();
+                }
+            });
+            
         });
 
     $('#editEntry').on('hidden.bs.modal', function () {
