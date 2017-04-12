@@ -47,12 +47,12 @@
 
     <div style="width: 100%; text-align:right;"></div>
 
+    <div class="spinner" id="plansLoading">
+        <div class="bounce1"></div>
+        <div class="bounce2"></div>
+        <div class="bounce3"></div>
+    </div>
     <div id="plansContent">
-        <div class="spinner">
-            <div class="bounce1"></div>
-            <div class="bounce2"></div>
-            <div class="bounce3"></div>
-        </div>
     </div>
 
     <!-- Edit shift modal -->
@@ -167,10 +167,11 @@
                         <span class="glyphicon glyphicon-save" aria-hidden="true"></span> PDF herunterladen
                     </a>
                 </div>
-                {{#groups}}
-                <table class="table table-striped table-bordered table-shifts {{#readonly}}plan-readonly{{/readonly}}" style="float:left;" data-plan-name="{{name}}">
-                    <thead>
-                        <tr style="height:70px;">
+                {{^mobile}}
+                    {{#groups}}
+                    <table class="table table-striped table-bordered table-shifts {{#readonly}}plan-readonly{{/readonly}}" style="float:left;" data-plan-name="{{name}}">
+                        <thead>
+                            <tr style="height:70px;">
                             <th style="width:60px;"></th>
                             {{#productions}}
                                 <th style="vertical-align:middle;">
@@ -182,20 +183,50 @@
                                     </small>
                                 </th>
                             {{/productions}}
-                        </tr>
-                    </thead>
-                    <tbody>
-                    {{#shifts}}
-                        <tr style="height: 97px;">
-                            <td class="td-time">{{from}}<br>-<br>{{to}}</td>
-                            {{#productions}}
-                                <td class="td-user" id="{{uid}}-{{productionUid}}-{{from}}-{{to}}" data-shift-name="{{name}}" data-unique="{{uid}}-{{productionUid}}-{{from}}-{{to}}">
-                            {{/productions}}
-                        </tr>
-                    {{/shifts}}
-                    </tbody>
-                </table>
-                {{/groups}}
+                            </tr>
+                        </thead>
+                        <tbody>
+                        {{#shifts}}
+                            <tr style="height: 97px;">
+                                <td class="td-time">{{from}}<br>-<br>{{to}}</td>
+                                {{#productions}}
+                                    <td class="td-user" id="{{uid}}-{{productionUid}}-{{from}}-{{to}}" data-shift-name="{{name}}" data-unique="{{uid}}-{{productionUid}}-{{from}}-{{to}}">
+                                {{/productions}}
+                            </tr>
+                        {{/shifts}}
+                        </tbody>
+                    </table>
+                    {{/groups}}
+                {{/mobile}}
+                {{#mobile}}
+                    {{#groups}}
+                        {{#productions}}
+                        <table class="table table-striped table-bordered table-shifts {{#readonly}}plan-readonly{{/readonly}}" style="float:left;" data-plan-name="{{name}}">
+                            <thead>
+                                <tr style="height:70px;">
+                                    <th style="width:60px;"></th>
+                                    <th style="vertical-align:middle;">
+                                        {{name}}<br>
+                                        <small>
+                                            <a href="mailto:{{masterEmail}}?subject=‹Schichtplaner›&nbsp;Frage&nbsp;zu&nbsp;{{name}}&nbsp;am&nbsp;Donnerstag%202016&amp;body=%0D%0A%0D%0A%0D%0AGesendet&nbsp;über&nbsp;Schichtplaner">
+                                                {{masterName}}
+                                            </a>&nbsp;
+                                        </small>
+                                    </th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                            {{#shifts}}
+                                <tr style="height: 97px;">
+                                    <td class="td-time">{{from}}<br>-<br>{{to}}</td>
+                                        <td class="td-user" id="{{uid}}-{{productionUid}}-{{from}}-{{to}}" data-shift-name="{{name}}" data-unique="{{uid}}-{{productionUid}}-{{from}}-{{to}}">
+                                </tr>
+                            {{/shifts}}
+                            </tbody>
+                        </table>
+                        {{/productions}}
+                    {{/groups}}
+                {{/mobile}}
             </div>
         {{/plans}}
         </div>

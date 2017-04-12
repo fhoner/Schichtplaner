@@ -4,9 +4,12 @@
  * @author Felix Honer
  */
 
-var editObject = null; // save editing object to store changed into it
+const MOBILE_SCREEN_WIDTH = 700;
+
+var printedPlans = null;
+var editObject = null;  // save editing object to store changed into it
 var deletedArr = new Array();   // stores deleted objects
-var max = 0;    // required user count for one shift
+var max = 0;            // required user count for one shift
 var isLoggedIn = false; // boolean whether user is logged in or not
 
 /**
@@ -71,12 +74,16 @@ function setIsLoggedIn(loggedIn) {
  * @param {string} plan Name of the selected plan.
  */
 function loadContent(plan) {
+    $("#plansLoading").show();
     $.ajax({
         url: "public/ajax.getPlans.php",
         method: "POST",
         success: function(res) {
+            res.mobile = $(window).width() <= MOBILE_SCREEN_WIDTH;
+            printedPlans = res;
             var template = $('#tableTpl').html();
             var html = Mustache.to_html(template, res);
+            $("#plansLoading").hide();
             $('#plansContent').html(html);
 
             fillShiftCells(res);
@@ -86,9 +93,6 @@ function loadContent(plan) {
                     $(this).addClass("shift-disabled");
                 }
             });
-            updateCells();
-            updateWorkersFixedInfo(null);
-            levelRows();
 
             $('.nav-tabs a').click(function (e) {
                 $(this).tab('show');
@@ -120,6 +124,10 @@ function loadContent(plan) {
                     }
                 });
             }
+
+            updateCells();
+            updateWorkersFixedInfo(null);
+            levelRows();
         }
     });
 }
@@ -282,6 +290,15 @@ $(document).ready(function () {
         timeout: 5000,
         resetOnHover: false,
         position: 'topRight'
+    });
+
+    $(window).resize(function() {
+        var mobile = $(window).width() <= MOBILE_SCREEN_WIDTH;
+        if (mobile != printedPlans.mobile) {
+            var url = document.location.toString();
+            var plan = url.split('#')[1];
+            loadContent(plan);
+        } 
     });
 
     $("body").on("click", "td", function () {
