@@ -75,6 +75,7 @@ function setIsLoggedIn(loggedIn) {
  */
 function loadContent(plan) {
     $("#plansLoading").show();
+    $("#plansContent").html('');
     $.ajax({
         url: "public/ajax.getPlans.php",
         method: "POST",
