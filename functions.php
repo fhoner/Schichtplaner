@@ -135,30 +135,6 @@ function groupShifts($plan)
         }
     }
     
-    // caluclate columns
-    $maxProductionCount = 6;    // max productions per row
-    $productionTimeSize = 2;    // adds this value to every time plan
-    $counter = 0;
-    $rowCount = 0;
-    foreach($shifts as $key => $value)
-    {
-        if($counter + count($value['productions']) > $maxProductionCount)
-        {
-            $shifts[$key]['row'] = $rowCount;
-            $rowCount++;
-            $counter = count($value['productions']);
-        }
-        else
-        {
-            $counter += count($value['productions']);
-        }
-        
-        if(!isset($shifts[$key]['row']))
-            $shifts[$key]['row'] = $rowCount;            
-            
-        $shifts[$key]['size'] = count($shifts[$key]['productions']);
-    }
-    
     //echo("<pre>" . json_encode($shifts, JSON_PRETTY_PRINT) . "</pre>");
     
     return $shifts;
@@ -179,10 +155,10 @@ function seoUrl($string) {
     // Make alphanumeric (removes all other characters)
     $string = preg_replace("/[^a-zA-Z0-9_\s-]/", "", $string);
     
-    //Clean up multiple dashes or whitespaces
+    // Clean up multiple dashes or whitespaces
     $string = preg_replace("/[\s-]+/", " ", $string);
     
-    //Convert whitespaces and underscore to dash
+    // Convert whitespaces and underscore to dash
     $string = preg_replace("/[\s_]/", "-", $string);
     return $string;
 }
@@ -194,6 +170,38 @@ function isLoggedin() {
     $userdb = dbConn::queryRow("SELECT * FROM :prefix:user WHERE name = :0", $_SESSION['user']);
     $logout = $userdb == null || $_SESSION['userData']['lastchange'] != $userdb['lastchange'];
     return isset($_SESSION['user']) && !$logout;
+}
+
+/**
+ * Prints a json result object and stops the script.
+ *
+ * @param boolean $success Boolean whether operation was done successfully or failed.
+ * @param string $message A message for user frontend.
+ * @param array $additional {
+ *      An associative array for any further key-value pairs.
+ *
+ *      @type string $key
+ *      @type object $value
+ *}
+ */
+function returnResult($success, $message, $additional = null) {
+    $arr = [
+        "success"   => (bool) $success
+    ];
+
+    if (strlen($message) > 0) {
+        $arr['message'] = $message;
+    }
+
+    if ($additional != null && array_keys($additional) !== range(0, count($additional) - 1)) {
+        foreach ($additional as $k => $v) {
+            $arr[$k] = $v;
+        }
+    }
+    
+    header("content-type: application/json");
+	echo json_encode($arr);
+	die();
 }
 
 ?>

@@ -1,21 +1,24 @@
-/*
- * main js file
- * Felix Honer
- * 2017/03/09
+/**
+ * Main javascript file for public user frontend.
+ * 
+ * @author Felix Honer
  */
 
 var editObject = null; // save editing object to store changed into it
 var deletedArr = new Array();   // stores deleted objects
 var max = 0;    // required user count for one shift
-var planname = "${name}$";  // can change when user renames the plan; so use js variable instead of template engine
 var isLoggedIn = false; // boolean whether user is logged in or not
 
+/**
+ * Sends the form data to server and handles its response. On successful login
+ * shift editing will be enabled.
+ */
 function login() {
     $(".login-input").find("input, button").prop("disabled", true);
     $("#loginButton").prop("disabled", true);
     setTimeout(function() {
         $.ajax({
-            url: "ajax.login.php",
+            url: "public/ajax.login.php",
             method: "POST",
             data: {
                 "username": $("#loginUsername").val(),
@@ -31,7 +34,7 @@ function login() {
                     $(".login-input").hide();
                 } else {
                     setIsLoggedIn(false);
-                    bootbox.alert('<strong>Anmeldung fehlgeschlagen</strong><br><br><p>' + res.message + '</p>');
+                    Notify.error("Anmeldung fehlgeschlagen", "Benutzername und Passwort stimmen nicht überein");
                     $("#loginUsername, #loginPassword").val('');
                 }
 
@@ -42,22 +45,108 @@ function login() {
     }, 250);
 }
 
+/**
+ * Sets UI controls as the user is logged in or not.
+ * 
+ * @param {boolean} loggedIn 
+ */
 function setIsLoggedIn(loggedIn) {
     isLoggedIn = loggedIn;
 
     if (isLoggedIn) {
-        $(".td-user").css("cursor", "pointer");
         $("#loginButton, .login-input").hide();
         $("#logoutButton").show();
         $("#loggedInAs").show();
     } else {
-        $(".td-user").css("cursor", "auto");
         $("#logoutButton").hide();
         $("#loginButton, .login-input").show();
         $("#loggedInAs").hide();
     }
 }
 
+/**
+ * Gets all plans by ajax request from server and generates the html output.
+ * Will place the html and add all required event handlers.
+ * 
+ * @param {string} plan Name of the selected plan.
+ */
+function loadContent(plan) {
+    $.ajax({
+        url: "public/ajax.getPlans.php",
+        method: "POST",
+        success: function(res) {
+            var template = $('#tableTpl').html();
+            var html = Mustache.to_html(template, res);
+            $('#plansContent').html(html);
+
+            fillShiftCells(res);
+
+            $(".td-user").each(function(i, el) {
+                if($(this).find(".td-user-max").length < 1) {
+                    $(this).addClass("shift-disabled");
+                }
+            });
+            updateCells();
+            updateWorkersFixedInfo(null);
+            levelRows();
+
+            $('.nav-tabs a').click(function (e) {
+                $(this).tab('show');
+                var scrollmem = $('body').scrollTop();
+                window.location.hash = this.hash;
+                $('html,body').scrollTop(scrollmem);
+            });
+
+            $('a[data-toggle="tab"]').on('shown.bs.tab', function (e) {
+                levelRows();
+            });       
+
+            // opens the shift dialog when the url contains a unique identifier
+            if (window.location.href.indexOf("#") < 0) {
+                $(".nav-tabs").find("li").find("a").first().trigger("click");
+            }
+            else {
+                plan = plan.split('?')[0];  // remove get parameters
+                $('a[href="#' + plan + '"]').parent().addClass("active");
+                $("#" + plan).addClass("active");
+                var shift = $.urlParam("s");
+                var opened = false;
+                $(".td-user").each(function () {
+                    if ($(this).data("unique") == shift) {
+                        if (!opened) {
+                            $(this).click();
+                        }
+                        opened = true;
+                    }
+                });
+            }
+        }
+    });
+}
+
+/**
+ * Generates the html for the shift cells.
+ * 
+ * @param {object} data The object containing the plans with workers.
+ */
+function fillShiftCells(data) {
+    data.plans.forEach(function(plan) {
+        plan.shifts.forEach(function(shift) {
+            var $td = $("#plansContent").find("[data-unique='" + shift.uid + "']");
+            $td.data('shift-id', shift.shiftId);
+            $td.data('required', shift.required);
+            var template = $('#cellTpl').html();
+            var html = Mustache.to_html(template, shift);
+            $td.append(html);
+        });
+    });
+}
+
+/**
+ * Updates the information icons besides the workers.
+ * 
+ * @param {object} cell DOM object td of the clicked shift cell.
+ */
 function updateWorkersFixedInfo(cell) {
     if (cell == typeof undefined || cell == null) {	 // update all cells 
         $(".worker").each(function () {
@@ -94,6 +183,11 @@ function updateWorkersFixedInfo(cell) {
     }
 }
 
+/**
+ * Escapes html characters from a string.
+ * 
+ * @param {string} unsafe String to be escaped.
+ */
 function escapeHtml(unsafe) {
     return unsafe
         .replace(/&/g, "&amp;")
@@ -102,20 +196,10 @@ function escapeHtml(unsafe) {
         .replace(/'/g, "&#039;");
 }
 
-function show(title, message, callback) {
-    bootbox.dialog({
-        title: title,
-        message: message,
-        buttons: {
-            main: {
-                label: "Schließen",
-                className: "btn-default",
-                callback: callback
-            }
-        }
-    });
-}
-
+/**
+ * Updates all shift cells to its current state, like disabled, warning or 
+ * danger.
+ */
 function updateCells() {
     $(".td-user").each(function (index, el) {
         var userCount = $(this).find(".worker").length;
@@ -134,7 +218,7 @@ function updateCells() {
             }
         }
         else {
-    $("#loginResult").hide();
+            $("#loginResult").hide();
             $(this).removeClass("warning danger");
             $(this).addClass("success");
         }
@@ -152,6 +236,9 @@ function updateCells() {
     });
 }
 
+/**
+ * Sets all rows of a table to the same height.
+ */
 function levelRows() {
     $("table tbody tr").css("height", "auto");
 
@@ -169,6 +256,11 @@ function levelRows() {
 
 }
 
+/**
+ * Gets a parameter from the current url.
+ * 
+ * @param {string} name Query string parameter.
+ */
 $.urlParam = function (name) {
     var results = new RegExp('[\?&]' + name + '=([^&#]*)').exec(window.location.href);
     if (results == null) {
@@ -179,33 +271,17 @@ $.urlParam = function (name) {
     }
 }
 
-$(function () {
-    var hash = window.location.hash;
-    hash && $('ul.nav a[href="' + hash + '"]').tab('show');
-
-    $('.nav-tabs a').click(function (e) {
-        $(this).tab('show');
-        var scrollmem = $('body').scrollTop();
-        window.location.hash = this.hash;
-        $('html,body').scrollTop(scrollmem);
-    });
-});
-
 $(document).ready(function () {
-    updateCells();
-    levelRows();
-    updateWorkersFixedInfo(null);
 
-    if (loginRevisit) {
-        setIsLoggedIn(true);
-    }
+    setIsLoggedIn(loginRevisit);
+    var url = document.location.toString();
+    var plan = url.split('#')[1];
+    loadContent(plan);
 
-    $(".top").tooltip({
-        placement: "top"
-    });
-
-    $('a[data-toggle="tab"]').on('shown.bs.tab', function (e) {
-        levelRows();
+    iziToast.settings({
+        timeout: 5000,
+        resetOnHover: false,
+        position: 'topRight'
     });
 
     $("body").on("click", "td", function () {
@@ -227,11 +303,10 @@ $(document).ready(function () {
     $("#logoutButton").click(function() {
         $(this).prop("disabled", true);
         $.ajax({
-            url: "ajax.logout.php",
+            url: "public/ajax.logout.php",
             method: "POST",
             success: function(res) {
                 res = JSON.parse(res);
-                console.log(res);
                 if (res.success) {
                     setIsLoggedIn(false);
                     $("body").stop().hide().fadeIn("fast");
@@ -353,7 +428,7 @@ $(document).ready(function () {
             obj['workers'] = workers;
 
             $.ajax({
-                url: "ajax.updateProductionShift.php",
+                url: "public/ajax.updateProductionShift.php",
                 method: "POST",
                 data: {
                     plan: $(".nav-tabs").find(".active").find("a").text(),
@@ -363,10 +438,7 @@ $(document).ready(function () {
                     result = JSON.parse(result);
 
                     if (result['result'] != "SUCCESS") {
-                        $("#editEntry").modal("hide");
-                        show("Fehler", "Die Änderungen wurden nicht gespeichert:<br/><br/>" + result['message'], function () {
-                            $("#editEntry").modal("show");
-                        });
+                        Notify.error("Fehler", "Die Änderungen wurden nicht gespeichert:<br/><br/>" + result['message']);
                     }
                     else {
                         // update cell html both in desktop and mobile section                    
@@ -381,6 +453,11 @@ $(document).ready(function () {
                         updateCells();
                         levelRows();
                         updateWorkersFixedInfo(editObject);
+                        Notify.success("Gespeichert", 
+                            '<span style="font-weight: bold;">' +
+                            $(editObject).data("shift-name") +
+                            '</span> wurde aktualisiert'
+                        );
                     }
 
                     $("#save-loading").hide();
@@ -393,110 +470,111 @@ $(document).ready(function () {
 
     });
 
-    $(".td-user")
-        .mouseenter(function () {
-            if (!$(this).hasClass("info") && isLoggedIn) {
-                $(this).stop().fadeTo("fast", 0.3, function () { });
-            }
-        })
-        .mouseleave(function () {
-            $(this).stop().fadeTo("fast", 1.0, function () { });
-        })
-        .click(function () {
-            if ($(this).hasClass("info") || !isLoggedIn) return;
+     
+    $("body").on("mouseenter", ".td-user", function () {
+        if (!$(this).hasClass("info") && isLoggedIn) {
+            $(this)
+                .css("cursor", "pointer")
+                .stop().fadeTo("fast", 0.3, function () { });
+        }
+    });
+    $("body").on("mouseleave", ".td-user", function () {
+        $(this)
+            .css("cursor", "auto")
+            .stop().fadeTo("fast", 1.0, function () { });
+    });
+    $("body").on("click", ".td-user", function () {
+        if ($(this).hasClass("info") || !isLoggedIn) return;
 
-            var newUrl = "";
-            if (window.location.href.indexOf("s=") >= 0)
-                newUrl = location.href.replace("s=" + $(editObject).data("unique"), "s=" + $(this).data("unique"));
-            else
-                newUrl = location.href.indexOf("?") >= 0 ?
-                    window.location.href + "s=" + $(this).data("unique") :
-                    window.location.href + "?s=" + $(this).data("unique");
-            history.pushState('data', '', newUrl);
+        var newUrl = "";
+        if (window.location.href.indexOf("s=") >= 0)
+            newUrl = location.href.replace("s=" + $(editObject).data("unique"), "s=" + $(this).data("unique"));
+        else
+            newUrl = location.href.indexOf("?") >= 0 ?
+                window.location.href + "s=" + $(this).data("unique") :
+                window.location.href + "?s=" + $(this).data("unique");
+        history.pushState('data', '', newUrl);
 
-            $("#editUserLoading").show();
-            $("#editUserContent").hide();
+        $("#editUserLoading").show();
+        $("#editUserContent").hide();
 
-            max = $(this).data("required");
-            editObject = $(this);
-            deletedArr = new Array();
+        max = $(this).data("required");
+        editObject = $(this);
+        deletedArr = new Array();
 
-            $("#add-name").parent().removeClass("has-error");
-            $("#add-email").parent().removeClass("has-error");
-            $("#add-name").val("");
-            $("#add-email").val("");
-            $("#editEntry").find(".modal-title").html($(this).data("shift-name") + " | " +
-                $(this).closest("tr").find(".td-time").html() + " <small>max. " + $(this).data("required") + " Personen</small>");
+        $("#add-name").parent().removeClass("has-error");
+        $("#add-email").parent().removeClass("has-error");
+        $("#add-name").val("");
+        $("#add-email").val("");
+        $("#editEntry").find(".modal-title").html($(this).data("shift-name") + " | " +
+            $(this).closest("tr").find(".td-time").text().replace("-", " - ") + " <small>max. " + $(this).data("required") + " Personen</small>");
 
-            $("#shift-comment").val($(this).find(".td-comment").text());
+        $("#shift-comment").val($(this).find(".td-comment").text());
 
-            $("#editEntry").modal();
+        $("#editEntry").modal();
 
-            $.ajax({
-                url: "ajax.getWorkers.php",
-                type: "POST",
-                data: {
-                    plan: editObject.closest("table").data("plan-name"),
-                    shiftId: editObject.data("shift-id"),
-                    production: editObject.data("shift-name")
-                },
-                success: function(res) {
-                    console.log(res);
+        $.ajax({
+            url: "public/ajax.getShift.php",
+            type: "POST",
+            data: {
+                plan: editObject.closest("table").data("plan-name"),
+                shiftId: editObject.data("shift-id"),
+                production: editObject.data("shift-name")
+            },
+            success: function(res) {
+                var tblBody = "";
+                res.workers.forEach(function (el, index) {
+                    tblBody += "<tr><td class=\"tr-debug user-edit-uid\">" + el.name + "\n" +
+                        el.email + "</td>" +
+                        "<td class=\"user-sort readonly\"><i class=\"fa fa-arrows\"></i></td>" +
+                        "<td class=\"user-edit-name\">" +
+                        el.name +
+                        "</td><td class=\"user-edit-email\">" +
+                        el.email + "</td>" +
+                        "<td class=\"readonly user-edit-is-fixed-td\">" +
+                        "<label><input type=\"checkbox\" class=\"mgc-switch mgc-sm user-edit-is-fixed\" " +
+                        (el.isFixed ? "checked" : "") + "></label></td>" +
+                        "<td class=\"tr-debug user-edit-action\">update</td>" +
+                        "<td><div class=\"delete-user\"><i class=\"fa fa-trash\"></i></div></td></tr>";
+                });
+                $("#table-edit tbody").html(tblBody);
+                
+                var el = document.getElementById('table-edit-tbody');
+                var sortable = Sortable.create(el, {
+                    handle: ".user-sort",
+                    animation: 150
+                });
 
-                    var tblBody = "";
-                    res.workers.forEach(function (el, index) {
-                        tblBody += "<tr><td class=\"tr-debug user-edit-uid\">" + el.name + "\n" +
-                            el.email + "</td>" +
-                            "<td class=\"user-sort readonly\"><i class=\"fa fa-arrows\"></i></td>" +
-                            "<td class=\"user-edit-name\">" +
-                            el.name +
-                            "</td><td class=\"user-edit-email\">" +
-                            el.email + "</td>" +
-                            "<td class=\"readonly user-edit-is-fixed-td\">" +
-                            "<label><input type=\"checkbox\" class=\"mgc-switch mgc-sm user-edit-is-fixed\" " +
-                            (el.isFixed ? "checked" : "") + "></label></td>" +
-                            "<td class=\"tr-debug user-edit-action\">update</td>" +
-                            "<td><div class=\"delete-user\"><i class=\"fa fa-trash\"></i></div></td></tr>";
-                    });
-                    $("#table-edit tbody").html(tblBody);
-                    
-                    var el = document.getElementById('table-edit-tbody');
-                    var sortable = Sortable.create(el, {
-                        handle: ".user-sort",
-                        animation: 150
-                    });
+                // enable all controls
+                $('#table-edit').editableTableWidget();
+                $(".add-worker").removeAttr("disabled");
+                $("#save-shift").prop("disabled", false);
+                $("#table-edit").find(".tr-delete-worker").show();
+                $('#table-edit').editableTableWidget();
+                $("#btn-add-user").prop("disabled", false);
+                $("#save-shift").prop("disabled", false);
 
-                    // enable all controls
-                    $('#table-edit').editableTableWidget();
-                    $(".add-worker").removeAttr("disabled");
-                    $("#save-shift").prop("disabled", false);
-                    $("#table-edit").find(".tr-delete-worker").show();
-                    $('#table-edit').editableTableWidget();
-                    $("#btn-add-user").prop("disabled", false);
-                    $("#save-shift").prop("disabled", false);
+                if ($(editObject).closest("table").hasClass("plan-readonly")) {
+                    $(".add-worker").prop("disabled", true);
+                    $("#save-shift").prop("disabled", true);
+                    $("#table-edit input").prop("disabled", true);
+                    $("input[type=checkbox]").prop("readonly", true);
+                    $("#table-edit").find(".tr-delete-worker").hide();  // hide delete icons
+                    $("#table-edit").find(".delete-user").closest("td").remove();
+                    $("#btn-add-user").prop("disabled", true);
+                    $("#save-shift").prop("disabled", true);
 
-                    if ($(editObject).closest("table").hasClass("plan-readonly")) {
-                        $(".add-worker").prop("disabled", true);
-                        $("#save-shift").prop("disabled", true);
-                        $("#table-edit input").prop("disabled", true);
-                        $("input[type=checkbox]").prop("readonly", true);
-                        $("#table-edit").find(".tr-delete-worker").hide();  // hide delete icons
-                        $("#table-edit").find(".delete-user").closest("td").remove();
-                        $("#btn-add-user").prop("disabled", true);
-                        $("#save-shift").prop("disabled", true);
-
-                        $("#table-edit tbody").find("td").addClass("readonly"); // make cells readonly
-                    }
-                    if (max <= $(editObject).find(".worker").length) {
-                        $(".add-worker").prop("disabled", true);
-                    }
-
-                    $("#editUserContent").show();
-                    $("#editUserLoading").hide();
+                    $("#table-edit tbody").find("td").addClass("readonly"); // make cells readonly
                 }
-            });
-            
-        });
+                if (max <= $(editObject).find(".worker").length) {
+                    $(".add-worker").prop("disabled", true);
+                }
+
+                $("#editUserContent").show();
+                $("#editUserLoading").hide();
+            }
+        });        
+    });
 
     $('#editEntry').on('hidden.bs.modal', function () {
         var newUrl = location.href.replace(/&?s=([^&]$|[^&]*)/i, "");
@@ -507,22 +585,4 @@ $(document).ready(function () {
 
         history.pushState('data', '', newUrl);
     });
-
-
-    // opens the shift dialog when the url contains a unique identifier
-    if (window.location.href.indexOf("#") < 0) {
-        $(".nav-tabs").find("li").find("a").first().trigger("click");
-    }
-    else {
-        var shift = $.urlParam("s");
-        var opened = false;
-        $(".td-user").each(function () {
-            if ($(this).data("unique") == shift) {
-                if (!opened) {
-                    $(this).click();
-                }
-                opened = true;
-            }
-        });
-    }
 });

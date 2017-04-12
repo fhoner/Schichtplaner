@@ -2,9 +2,9 @@
 
 session_start();
 
-require("config.php");
-require("functions.php");
-require("transaction.php");
+require("../config.php");
+require(BASEDIR . "functions.php");
+require(BASEDIR . "transaction.php");
 
 $errors = array();
 
