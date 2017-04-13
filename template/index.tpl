@@ -175,7 +175,7 @@
                             <th style="width:60px;"></th>
                             {{#productions}}
                                 <th style="vertical-align:middle;">
-                                    {{name}}<br>
+                                    {{productionName}}<br>
                                     <small>
                                         <a href="mailto:{{masterEmail}}?subject=‹Schichtplaner›&nbsp;Frage&nbsp;zu&nbsp;{{name}}&nbsp;am&nbsp;Donnerstag%202016&amp;body=%0D%0A%0D%0A%0D%0AGesendet&nbsp;über&nbsp;Schichtplaner">
                                             {{masterName}}
