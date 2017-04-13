@@ -17,30 +17,41 @@ module.exports = function (grunt) {
 
         uglify: {
             dist: {
-                files: {
-                    'dist/js/dependencies.js': [
-                        'node_modules/jquery/dist/jquery.min.js',
-                        'node_modules/bootstrap/dist/js/bootstrap.min.js',
-                        'node_modules/bootbox/bootbox.min.js',
-                        'node_modules/editable-table/mindmup-editabletable.js',
-                        'node_modules/izitoast/dist/js/iziToast.min.js',
-                        'js/notify.js'
-                    ],
-                    'dist/js/schichtplaner.js': [
-                        'dist/js/dependencies.js',
-                        'node_modules/sortablejs/Sortable.min.js',
-                        'node_modules/mustache/mustache.min.js',
-                        'js/user.main.js'
-                    ],
-                    'dist/js/schichtplaner.admin.js': [
-                        'dist/js/dependencies.js',
-                        'node_modules/bootstrap-datepicker/dist/js/bootstrap-datepicker.min.js',
-                        'node_modules/bootstrap-switch/dist/js/bootstrap-switch.min.js',
-                        'node_modules/bootstrap-formhelpers/dist/js/bootstrap-formhelpers.min.js',
-                        'js/admin**.js',
-                    ],
-                },
-                nonull: true
+                files: [
+                    {
+                        dest: 'dist/js/dependencies.js',
+                        src: [
+                            'node_modules/jquery/dist/jquery.min.js',
+                            'node_modules/bootstrap/dist/js/bootstrap.min.js',
+                            'node_modules/bootbox/bootbox.min.js',
+                            'node_modules/editable-table/mindmup-editabletable.js',
+                            'node_modules/izitoast/dist/js/iziToast.min.js',
+                            'js/notify.js'
+                        ],
+                        nonull: true
+                    },
+                    {
+                        dest: 'dist/js/schichtplaner.js',
+                        src: [
+                            'dist/js/dependencies.js',
+                            'node_modules/sortablejs/Sortable.min.js',
+                            'node_modules/mustache/mustache.min.js',
+                            'js/user.main.js'
+                        ],
+                        nonull: true
+                    },
+                    {
+                        dest: 'dist/js/schichtplaner.admin.js',
+                        src: [
+                            'dist/js/dependencies.js',
+                            'node_modules/bootstrap-datepicker/dist/js/bootstrap-datepicker.min.js',
+                            'node_modules/bootstrap-switch/dist/js/bootstrap-switch.min.js',
+                            'node_modules/bootstrap-formhelpers/dist/js/bootstrap-formhelpers.min.js',
+                            'js/admin**.js',
+                        ],
+                        nonull: true
+                    },
+                ]
             }
         },
 
@@ -49,26 +60,36 @@ module.exports = function (grunt) {
                 keepSpecialComments: 0
             },
             target: {
-                files: {
-                    'dist/css/core.css': [
-                        'node_modules/bootstrap/dist/css/bootstrap.min.css',
-                        'node_modules/font-awesome/css/font-awesome.min.css',
-                        'node_modules/izitoast/dist/css/iziToast.min.css',
-                    ],
-                    'dist/css/schichtplaner.css': [
-                        'dist/css/core.css',
-                        'node_modules/magic-input/dist/magic-input.min.css',
-                        'template/**.css',
-                    ],
-                    'dist/css/schichtplaner.admin.css': [
-                        'dist/css/core.css',
-                        'node_modules/jquery-ui-dist/jquery-ui.min.css',
-                        'node_modules/bootstrap-datepicker/dist/css/bootstrap-datepicker3.standalone.min.css',
-                        'node_modules/bootstrap-formhelpers/dist/css/bootstrap-formhelpers.min.css',
-                        'node_modules/bootstrap-switch/dist/css/bootstrap3/bootstrap-switch.min.css',
-                        'template/admin/**.css',
-                    ],
-                }
+                files: [
+                    {
+                        dest: 'dist/css/core.css',
+                        src: [
+                            'node_modules/bootstrap/dist/css/bootstrap.min.css',
+                            'node_modules/font-awesome/css/font-awesome.min.css',
+                            'node_modules/izitoast/dist/css/iziToast.min.css',
+                        ],
+                        nonull: true
+                    },
+                    {
+                        dest: 'dist/css/schichtplaner.css',
+                        src: [
+                            'dist/css/core.css',
+                            'node_modules/magic-input/dist/magic-input.min.css',
+                            'template/**.css',
+                        ]
+                    },
+                    {
+                        dest: 'dist/css/schichtplaner.admin.css',
+                        src: [
+                            'dist/css/core.css',
+                            'node_modules/jquery-ui-dist/jquery-ui.min.css',
+                            'node_modules/bootstrap-datepicker/dist/css/bootstrap-datepicker3.standalone.min.css',
+                            'node_modules/bootstrap-formhelpers/dist/css/bootstrap-formhelpers.min.css',
+                            'node_modules/bootstrap-switch/dist/css/bootstrap3/bootstrap-switch.min.css',
+                            'template/admin/**.css',
+                        ]
+                    },
+                ]
             }
         },
 
