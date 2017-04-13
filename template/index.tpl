@@ -78,7 +78,7 @@
                         <thead>
                             <tr>
                                 <th class="tr-debug">UID</th>
-                                <th></th>
+                                <th id="thSortUsers"></th>
                                 <th style="width:50%;">Name</th>
                                 <th style="width:50%;">E-Mail</th>
                                 <th style="width:50%;">Fix</th>

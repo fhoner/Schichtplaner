@@ -324,11 +324,12 @@ function addEditShiftHandler() {
                 production: editObject.data("shift-name")
             },
             success: function(res) {
+                var isReadonly = $(editObject).closest("table").hasClass("plan-readonly");
                 var tblBody = "";
                 res.workers.forEach(function (el, index) {
                     tblBody += "<tr><td class=\"tr-debug user-edit-uid\">" + el.name + "\n" +
                         el.email + "</td>" +
-                        "<td class=\"user-sort readonly\"><i class=\"fa fa-arrows\"></i></td>" +
+                        (!isReadonly ? "<td class=\"user-sort readonly\"><i class=\"fa fa-arrows\"></i></td>" : "") +
                         "<td class=\"user-edit-name\">" +
                         el.name +
                         "</td><td class=\"user-edit-email\">" +
@@ -355,8 +356,9 @@ function addEditShiftHandler() {
                 $('#table-edit').editableTableWidget();
                 $("#btn-add-user").prop("disabled", false);
                 $("#save-shift").prop("disabled", false);
+                $("#thSortUsers").show();
 
-                if ($(editObject).closest("table").hasClass("plan-readonly")) {
+                if (isReadonly) {
                     $(".add-worker").prop("disabled", true);
                     $("#save-shift").prop("disabled", true);
                     $("#table-edit input").prop("disabled", true);
@@ -365,8 +367,8 @@ function addEditShiftHandler() {
                     $("#table-edit").find(".delete-user").closest("td").remove();
                     $("#btn-add-user").prop("disabled", true);
                     $("#save-shift").prop("disabled", true);
-
                     $("#table-edit tbody").find("td").addClass("readonly"); // make cells readonly
+                    $("#thSortUsers").hide();
                 }
                 if (max <= $(editObject).find(".worker").length) {
                     $(".add-worker").prop("disabled", true);
