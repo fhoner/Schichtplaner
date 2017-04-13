@@ -190,7 +190,7 @@
                             <tr style="height: 97px;">
                                 <td class="td-time">{{from}}<br>-<br>{{to}}</td>
                                 {{#productions}}
-                                    <td class="td-user" id="{{uid}}-{{productionUid}}-{{from}}-{{to}}" data-shift-name="{{name}}" data-unique="{{uid}}-{{productionUid}}-{{from}}-{{to}}">
+                                    <td class="td-user" id="{{uid}}-{{productionUid}}-{{from}}-{{to}}" data-shift-name="{{productionName}}" data-unique="{{uid}}-{{productionUid}}-{{from}}-{{to}}">
                                 {{/productions}}
                             </tr>
                         {{/shifts}}
@@ -219,7 +219,7 @@
                             {{#shifts}}
                                 <tr style="height: 97px;">
                                     <td class="td-time">{{from}}<br>-<br>{{to}}</td>
-                                        <td class="td-user" id="{{uid}}-{{productionUid}}-{{from}}-{{to}}" data-shift-name="{{name}}" data-unique="{{uid}}-{{productionUid}}-{{from}}-{{to}}">
+                                        <td class="td-user" id="{{uid}}-{{productionUid}}-{{from}}-{{to}}" data-shift-name="{{productionName}}" data-unique="{{uid}}-{{productionUid}}-{{from}}-{{to}}">
                                 </tr>
                             {{/shifts}}
                             </tbody>

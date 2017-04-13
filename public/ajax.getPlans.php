@@ -160,10 +160,10 @@ foreach(dbConn::query("SELECT *, IF(editable > CURRENT_TIMESTAMP, 1, 0) AS edita
                 }
             }
             $prod[] = [
-                'name'          => $production,
-                'productionUid' => seoUrl($production),
-                'masterName'    => $masterName,
-                'masterEmail'   => $masterEmail
+                'productionName'    => $production,
+                'productionUid'     => seoUrl($production),
+                'masterName'        => $masterName,
+                'masterEmail'       => $masterEmail
             ];
         }
         $groups[$i]['productions'] = $prod;        

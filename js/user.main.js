@@ -129,6 +129,7 @@ function loadContent(plan) {
             updateCells();
             updateWorkersFixedInfo(null);
             levelRows();
+            addEditShiftHandler();
         }
     });
 }
@@ -278,6 +279,104 @@ $.urlParam = function (name) {
     else {
         return results[1] || 0;
     }
+}
+
+/**
+ * Adds the edit shift handler on shift cells.
+ */
+function addEditShiftHandler() {
+    $(".td-user").click(function () {
+        if ($(this).hasClass("info") || !isLoggedIn) return;
+
+        var newUrl = "";
+        if (window.location.href.indexOf("s=") >= 0)
+            newUrl = location.href.replace("s=" + $(editObject).data("unique"), "s=" + $(this).data("unique"));
+        else
+            newUrl = location.href.indexOf("?") >= 0 ?
+                window.location.href + "s=" + $(this).data("unique") :
+                window.location.href + "?s=" + $(this).data("unique");
+        history.pushState('data', '', newUrl);
+
+        $("#editUserLoading").show();
+        $("#editUserContent").hide();
+
+        max = $(this).data("required");
+        editObject = $(this);
+        deletedArr = new Array();
+
+        $("#add-name").parent().removeClass("has-error");
+        $("#add-email").parent().removeClass("has-error");
+        $("#add-name").val("");
+        $("#add-email").val("");
+        $("#editEntry").find(".modal-title").html($(this).data("shift-name") + " | " +
+            $(this).closest("tr").find(".td-time").text().replace("-", " - ") + " <small>max. " + $(this).data("required") + " Personen</small>");
+
+        $("#shift-comment").val($(this).find(".td-comment").text());
+
+        $("#editEntry").modal();
+
+        $.ajax({
+            url: "public/ajax.getShift.php",
+            type: "POST",
+            data: {
+                plan: editObject.closest("table").data("plan-name"),
+                shiftId: editObject.data("shift-id"),
+                production: editObject.data("shift-name")
+            },
+            success: function(res) {
+                var tblBody = "";
+                res.workers.forEach(function (el, index) {
+                    tblBody += "<tr><td class=\"tr-debug user-edit-uid\">" + el.name + "\n" +
+                        el.email + "</td>" +
+                        "<td class=\"user-sort readonly\"><i class=\"fa fa-arrows\"></i></td>" +
+                        "<td class=\"user-edit-name\">" +
+                        el.name +
+                        "</td><td class=\"user-edit-email\">" +
+                        el.email + "</td>" +
+                        "<td class=\"readonly user-edit-is-fixed-td\">" +
+                        "<label><input type=\"checkbox\" class=\"mgc-switch mgc-sm user-edit-is-fixed\" " +
+                        (el.isFixed ? "checked" : "") + "></label></td>" +
+                        "<td class=\"tr-debug user-edit-action\">update</td>" +
+                        "<td><div class=\"delete-user\"><i class=\"fa fa-trash\"></i></div></td></tr>";
+                });
+                $("#table-edit tbody").html(tblBody);
+                
+                var el = document.getElementById('table-edit-tbody');
+                var sortable = Sortable.create(el, {
+                    handle: ".user-sort",
+                    animation: 150
+                });
+
+                // enable all controls
+                $('#table-edit').editableTableWidget();
+                $(".add-worker").removeAttr("disabled");
+                $("#save-shift").prop("disabled", false);
+                $("#table-edit").find(".tr-delete-worker").show();
+                $('#table-edit').editableTableWidget();
+                $("#btn-add-user").prop("disabled", false);
+                $("#save-shift").prop("disabled", false);
+
+                if ($(editObject).closest("table").hasClass("plan-readonly")) {
+                    $(".add-worker").prop("disabled", true);
+                    $("#save-shift").prop("disabled", true);
+                    $("#table-edit input").prop("disabled", true);
+                    $("input[type=checkbox]").prop("readonly", true);
+                    $("#table-edit").find(".tr-delete-worker").hide();  // hide delete icons
+                    $("#table-edit").find(".delete-user").closest("td").remove();
+                    $("#btn-add-user").prop("disabled", true);
+                    $("#save-shift").prop("disabled", true);
+
+                    $("#table-edit tbody").find("td").addClass("readonly"); // make cells readonly
+                }
+                if (max <= $(editObject).find(".worker").length) {
+                    $(".add-worker").prop("disabled", true);
+                }
+
+                $("#editUserContent").show();
+                $("#editUserLoading").hide();
+            }
+        });        
+    });
 }
 
 $(document).ready(function () {
@@ -487,7 +586,6 @@ $(document).ready(function () {
         }, 500);
 
     });
-
      
     $("body").on("mouseenter", ".td-user", function () {
         if (!$(this).hasClass("info") && isLoggedIn) {
@@ -500,98 +598,6 @@ $(document).ready(function () {
         $(this)
             .css("cursor", "auto")
             .stop().fadeTo("fast", 1.0, function () { });
-    });
-    $("body").on("click", ".td-user", function () {
-        if ($(this).hasClass("info") || !isLoggedIn) return;
-
-        var newUrl = "";
-        if (window.location.href.indexOf("s=") >= 0)
-            newUrl = location.href.replace("s=" + $(editObject).data("unique"), "s=" + $(this).data("unique"));
-        else
-            newUrl = location.href.indexOf("?") >= 0 ?
-                window.location.href + "s=" + $(this).data("unique") :
-                window.location.href + "?s=" + $(this).data("unique");
-        history.pushState('data', '', newUrl);
-
-        $("#editUserLoading").show();
-        $("#editUserContent").hide();
-
-        max = $(this).data("required");
-        editObject = $(this);
-        deletedArr = new Array();
-
-        $("#add-name").parent().removeClass("has-error");
-        $("#add-email").parent().removeClass("has-error");
-        $("#add-name").val("");
-        $("#add-email").val("");
-        $("#editEntry").find(".modal-title").html($(this).data("shift-name") + " | " +
-            $(this).closest("tr").find(".td-time").text().replace("-", " - ") + " <small>max. " + $(this).data("required") + " Personen</small>");
-
-        $("#shift-comment").val($(this).find(".td-comment").text());
-
-        $("#editEntry").modal();
-
-        $.ajax({
-            url: "public/ajax.getShift.php",
-            type: "POST",
-            data: {
-                plan: editObject.closest("table").data("plan-name"),
-                shiftId: editObject.data("shift-id"),
-                production: editObject.data("shift-name")
-            },
-            success: function(res) {
-                var tblBody = "";
-                res.workers.forEach(function (el, index) {
-                    tblBody += "<tr><td class=\"tr-debug user-edit-uid\">" + el.name + "\n" +
-                        el.email + "</td>" +
-                        "<td class=\"user-sort readonly\"><i class=\"fa fa-arrows\"></i></td>" +
-                        "<td class=\"user-edit-name\">" +
-                        el.name +
-                        "</td><td class=\"user-edit-email\">" +
-                        el.email + "</td>" +
-                        "<td class=\"readonly user-edit-is-fixed-td\">" +
-                        "<label><input type=\"checkbox\" class=\"mgc-switch mgc-sm user-edit-is-fixed\" " +
-                        (el.isFixed ? "checked" : "") + "></label></td>" +
-                        "<td class=\"tr-debug user-edit-action\">update</td>" +
-                        "<td><div class=\"delete-user\"><i class=\"fa fa-trash\"></i></div></td></tr>";
-                });
-                $("#table-edit tbody").html(tblBody);
-                
-                var el = document.getElementById('table-edit-tbody');
-                var sortable = Sortable.create(el, {
-                    handle: ".user-sort",
-                    animation: 150
-                });
-
-                // enable all controls
-                $('#table-edit').editableTableWidget();
-                $(".add-worker").removeAttr("disabled");
-                $("#save-shift").prop("disabled", false);
-                $("#table-edit").find(".tr-delete-worker").show();
-                $('#table-edit').editableTableWidget();
-                $("#btn-add-user").prop("disabled", false);
-                $("#save-shift").prop("disabled", false);
-
-                if ($(editObject).closest("table").hasClass("plan-readonly")) {
-                    $(".add-worker").prop("disabled", true);
-                    $("#save-shift").prop("disabled", true);
-                    $("#table-edit input").prop("disabled", true);
-                    $("input[type=checkbox]").prop("readonly", true);
-                    $("#table-edit").find(".tr-delete-worker").hide();  // hide delete icons
-                    $("#table-edit").find(".delete-user").closest("td").remove();
-                    $("#btn-add-user").prop("disabled", true);
-                    $("#save-shift").prop("disabled", true);
-
-                    $("#table-edit tbody").find("td").addClass("readonly"); // make cells readonly
-                }
-                if (max <= $(editObject).find(".worker").length) {
-                    $(".add-worker").prop("disabled", true);
-                }
-
-                $("#editUserContent").show();
-                $("#editUserLoading").hide();
-            }
-        });        
     });
 
     $('#editEntry').on('hidden.bs.modal', function () {
