@@ -5,12 +5,13 @@
     <title>Schichtplan ${organisation}$</title>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1, user-scalable=0">
-    <script src="dist/js/schichtplaner.js" type="text/javascript"></script>
+    <script src="dist/js/schichtplaner.js" type="text/javascript"></script>    
     <link rel="stylesheet" href="dist/css/schichtplaner.css">
     <script>const loginRevisit = ${loggedIn}$;</script>
 </head>
 
 <body>
+    <!-- navbar -->
     <div class="navbar navbar-default navbar-fixed-top">
         <div class="container">
             <div class="navbar-header">
@@ -44,15 +45,14 @@
     </div>
 
 
-    <div style="width: 100%; text-align:right;">
-        
-    </div>
+    <div style="width: 100%; text-align:right;"></div>
 
-    <ul class="nav nav-tabs" role="tablist" style="margin:10px;">
-        ${plansTab}$
-    </ul>
-    <div class="tab-content">
-        ${plansContent}$
+    <div class="spinner" id="plansLoading">
+        <div class="bounce1"></div>
+        <div class="bounce2"></div>
+        <div class="bounce3"></div>
+    </div>
+    <div id="plansContent">
     </div>
 
     <!-- Edit shift modal -->
@@ -96,7 +96,8 @@
                         <input type="text" class="form-control" placeholder="Kommentar hinzufügen..." />
                         <hr />
                     </div>
-                    <h4>Helfer hinzufügen</h4> Name
+                    <h4>Helfer hinzufügen</h4> 
+                    Name
                     <div>
                         <input type="text" class="form-control add-worker" placeholder="Vorname Nachname" id="add-name">
                     </div>
@@ -105,8 +106,8 @@
                         <input type="text" class="form-control add-worker" placeholder="name@domain.com" id="add-email">
                     </div>
                     <button type="button" class="btn btn-default pull-right add-worker" id="btn-add-user">
-                            <i class="fa fa-user-plus"></i> Hinzufügen
-                        </button>
+                        <i class="fa fa-user-plus"></i> Hinzufügen
+                    </button>
                     <br /><br />
                 </div>
                 <div class="modal-footer">
@@ -124,8 +125,112 @@
     <footer class="footer">
         <p class="text-muted"><small>v0.9b &copy; 2017 Felix Honer</small></p>
     </footer>
+    
 
+    <!-- Shift cell template -->
+    <script id="cellTpl" type="text/template">
+    {{#workers}}
+        <div class="worker {{^isFixed}}not-fixed{{/isFixed}}" data-name="{{name}}" data-email="{{#hasEmail}}true{{/hasEmail}}{{^hasEmail}}false{{/hasEmail}}">
+            <div class="user-name">
+                <span class="glyphicon glyphicon-question-sign not-fixed-hint" aria-hidden="true"></span>
+                <span class="glyphicon glyphicon-ok-sign is-fixed-hint" aria-hidden="true"></span>
+                <span class="top glyphicon glyphicon-exclamation-sign missing-email-hint" aria-hidden="true" style="font-size: 12px; color: rgb(51, 51, 51); {{#hasEmail}}display:none;{{/hasEmail}}" title="" data-original-title="E-Mail Adresse fehlt"></span>
+                <span class="name-inline">{{name}}</span>
+            </div>
+            <div class="user-email">{{#hasEmail}}true{{/hasEmail}}{{^hasEmail}}false{{/hasEmail}}</div>
+        </div>
+    {{/workers}}
+    <div class="td-user-max"><!-- calculated by js --></div>
+    <div class="td-comment" style="display:none;"></div>
+    </script>
+
+    <!-- Plan tabs and content panes template -->
+    <script id="tableTpl" type="text/template">
+        <ul class="nav nav-tabs" role="tablist" style="margin:10px;">
+            {{#plans}}
+            <li role="presentation" class="">
+                <a href="#{{uid}}" aria-controls="{{uid}}" role="tab" data-toggle="tab"><strong>{{name}}</strong></a>
+            </li>
+            {{/plans}}
+        </ul>
+
+        <div class="tab-content">
+        {{#plans}}
+            <div role="tabpanel" class="tab-pane" id="{{uid}}">
+                {{#readonly}}
+                <div class="alert alert-info closed-hint" role="alert">
+                    Dieser Plan ist geschlossen und kann nicht mehr bearbeitet werden.
+                </div>
+                {{/readonly}}
+                <div style="width:100%; text-align:right; margin-bottom:20px;">
+                    <a class="btn btn-primary" href="export.php?plan={{urlencoded}}" target="_blank">
+                        <span class="glyphicon glyphicon-save" aria-hidden="true"></span> PDF herunterladen
+                    </a>
+                </div>
+                {{^mobile}}
+                    {{#groups}}
+                    <table class="table table-striped table-bordered table-shifts {{#readonly}}plan-readonly{{/readonly}}" style="float:left;" data-plan-name="{{name}}">
+                        <thead>
+                            <tr style="height:70px;">
+                            <th style="width:60px;"></th>
+                            {{#productions}}
+                                <th style="vertical-align:middle;">
+                                    {{name}}<br>
+                                    <small>
+                                        <a href="mailto:{{masterEmail}}?subject=‹Schichtplaner›&nbsp;Frage&nbsp;zu&nbsp;{{name}}&nbsp;am&nbsp;Donnerstag%202016&amp;body=%0D%0A%0D%0A%0D%0AGesendet&nbsp;über&nbsp;Schichtplaner">
+                                            {{masterName}}
+                                        </a>&nbsp;
+                                    </small>
+                                </th>
+                            {{/productions}}
+                            </tr>
+                        </thead>
+                        <tbody>
+                        {{#shifts}}
+                            <tr style="height: 97px;">
+                                <td class="td-time">{{from}}<br>-<br>{{to}}</td>
+                                {{#productions}}
+                                    <td class="td-user" id="{{uid}}-{{productionUid}}-{{from}}-{{to}}" data-shift-name="{{name}}" data-unique="{{uid}}-{{productionUid}}-{{from}}-{{to}}">
+                                {{/productions}}
+                            </tr>
+                        {{/shifts}}
+                        </tbody>
+                    </table>
+                    {{/groups}}
+                {{/mobile}}
+                {{#mobile}}
+                    {{#groups}}
+                        {{#productions}}
+                        <table class="table table-striped table-bordered table-shifts {{#readonly}}plan-readonly{{/readonly}}" style="float:left;" data-plan-name="{{name}}">
+                            <thead>
+                                <tr style="height:70px;">
+                                    <th style="width:60px;"></th>
+                                    <th style="vertical-align:middle;">
+                                        {{name}}<br>
+                                        <small>
+                                            <a href="mailto:{{masterEmail}}?subject=‹Schichtplaner›&nbsp;Frage&nbsp;zu&nbsp;{{name}}&nbsp;am&nbsp;Donnerstag%202016&amp;body=%0D%0A%0D%0A%0D%0AGesendet&nbsp;über&nbsp;Schichtplaner">
+                                                {{masterName}}
+                                            </a>&nbsp;
+                                        </small>
+                                    </th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                            {{#shifts}}
+                                <tr style="height: 97px;">
+                                    <td class="td-time">{{from}}<br>-<br>{{to}}</td>
+                                        <td class="td-user" id="{{uid}}-{{productionUid}}-{{from}}-{{to}}" data-shift-name="{{name}}" data-unique="{{uid}}-{{productionUid}}-{{from}}-{{to}}">
+                                </tr>
+                            {{/shifts}}
+                            </tbody>
+                        </table>
+                        {{/productions}}
+                    {{/groups}}
+                {{/mobile}}
+            </div>
+        {{/plans}}
+        </div>
+    </script>
 </body>
 
 </html>
-<!-- page creation duration was ${creationTime}$ms -->

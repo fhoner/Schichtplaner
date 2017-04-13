@@ -1,10 +1,11 @@
 <?php
 
-require("config.php");
-require("functions.php");
-require("transaction.php");
-
 session_start();
+
+require("../config.php");
+require(BASEDIR . "functions.php");
+require(BASEDIR . "transaction.php");
+
 if (!isLoggedin()) {
     die(json_encode(array(
         "result"    => "ERROR",
@@ -60,7 +61,6 @@ if (!isLoggedin()) {
 
 $d = $_POST['data'];
 $errors = array();
-//$errors[] = json_encode($_POST);
 
 // validation checks
 if(isset($d['workers']))

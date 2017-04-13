@@ -1,10 +1,10 @@
 <?php
 
-require("config.php");
-require("functions.php");
-require("transaction.php");
-
 session_start();
+
+require("../config.php");
+require(BASEDIR . "functions.php");
+
 if (!isLoggedin()) {
     die(json_encode(array(
         "success"   => false,
@@ -27,7 +27,7 @@ foreach (dbConn::query("SELECT name, email, isFixed FROM :prefix:worker WHERE
     $workers[] = $r;
 }
 
-header("content-type: text/json");
+header("content-type: application/json");
 echo json_encode(array(
     "success"   => true,
     "workers"   => $workers

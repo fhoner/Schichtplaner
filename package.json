@@ -16,7 +16,8 @@
     "bootbox": "^4.4.0",
     "font-awesome": "^4.7.0",
     "bootstrapFormHelpers": "git://github.com/winmarkltd/BootstrapFormHelpers.git",
-    "izitoast": "^1.0.0"
+    "izitoast": "^1.0.0",
+    "mustache": "^2.0.0"
   },
   "license": "UNLICENSED",
   "devDependencies": {

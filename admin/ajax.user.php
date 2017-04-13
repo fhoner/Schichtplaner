@@ -4,7 +4,7 @@ require("../config.php");
 require(BASEDIR . "admin/functions.php");
 
 function returnResult($success, $message, $additional = null) {
-    header("content-type: text/json");
+    header("content-type: application/json");
     $arr = [
         "success"   => (bool) $success,
         "message"   => $message
