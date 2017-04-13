@@ -11,7 +11,7 @@ DEFINE("WEBMASTER", "info@domain.de");                      // email of webmaste
 require("dbConn.php");
 require("template.php");
 require_once("emailSettings.php");
-require_once(BASEDIR . "vendor/autoload.php");
+require_once("vendor/autoload.php");
 
 /* DATABASE SETUP */
 dbConn::setHost("localhost");
