@@ -281,6 +281,11 @@ $.urlParam = function (name) {
     }
 }
 
+/**
+ * Adds autocomplete to name and email input.
+ * 
+ * @param {array} data Array with all workers.
+ */
 function addAutocomplete(data) {
     data.forEach(function(el) {
         el.descriptionName = el.email + ", " + el.plan;
