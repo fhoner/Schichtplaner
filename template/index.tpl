@@ -123,7 +123,13 @@
 
     <div style="clear:both;"></div>
     <footer class="footer">
-        <p class="text-muted"><small>v0.9b &copy; 2017 Felix Honer</small></p>
+        <p class="text-muted">
+            <small>
+                Schichtplaner by Felix Honer - 
+                <i class="fa fa-github" aria-hidden="true"></i> 
+                <a href="https://github.com/fhoner/Schichtplaner" target="_blank">fhoner/schichtplaner</a>
+            </small>
+        </p>
     </footer>
     
 
