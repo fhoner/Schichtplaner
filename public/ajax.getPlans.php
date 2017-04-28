@@ -3,6 +3,9 @@
 require("../config.php");
 require(BASEDIR . "functions.php");
 
+use \Schichtplaner\ShiftMerger;
+use \Schichtplaner\PersistenceService;
+
 function prodContainsShift($prod, $shift, $haystack) {
     foreach ($haystack as $db) {
         if ($db['production'] == $prod && $db['fromDate'] . "-" . $db['toDate'] == $shift) {
@@ -13,89 +16,11 @@ function prodContainsShift($prod, $shift, $haystack) {
     return false;
 }
 
-/**
- * Makes a uid string.
- *
- * @param string $plan Name of the plan.
- * @param string $production Name of the production.
- * @param string $fromDate begin date.
- * @param string $toDate end date.
- *
- * @return string Valid string ready for usage as css id.
- */
-function makeUid($plan, $production, $fromDate, $toDate) {
-    return seoUrl(
-            $plan . "-" .
-            $production . "-"
-        ) .
-        substr($fromDate, 0, 5) . "-" .
-        substr($toDate, 0, 5);
-}
-
-/**
- * Loads count of required workers and already saved workers grouped by uid.
- *
- * @param string $plan name of the plan.
- *
- * @return array Array with all shifts containing required count and saved workers.
- */
-function getDetailedShifts($plan) {
-    $shifts = [];
-    foreach (dbConn::query("SELECT 
-                                shift.shiftId,
-                                prod_shift.production,
-                                worker.name,
-                                worker.email,
-                                worker.isFixed,
-                                worker.position,
-                                prod_shift.required,
-                                shift.fromDate,
-                                shift.toDate
-                            FROM :prefix:production_shift AS prod_shift
-                            LEFT JOIN :prefix:shift AS shift
-                                ON shift.shiftId = prod_shift.shift 
-                                AND shift.plan = prod_shift.plan
-                            LEFT JOIN :prefix:worker AS worker
-                                ON worker.production = prod_shift.production 
-                                AND worker.shift = shift.shiftId 
-                                AND worker.plan = prod_shift.plan
-                            WHERE shift.plan = :0
-                            ORDER BY production, shiftId, position ASC", $plan) as $entry) {
-        $uid = makeUid($plan, $entry['production'], $entry['fromDate'], $entry['toDate']);
-        if (!array_key_exists($uid, $shifts)) {
-            $shifts[$uid] = [
-                'required'  => $entry['required'],
-                'shiftId'   => $entry['shiftId'],
-                'workers'   => []
-            ];
-        }
-        if ($entry['name'] != null) {
-            $shifts[$uid]['workers'][] = [
-                'name'      => $entry['name'],
-                'hasEmail'  => strlen($entry['email']) > 0,
-                'isFixed'   => (boolean) $entry['isFixed'] == true
-            ];
-        }
-    }
-
-    $arr = [];
-    foreach ($shifts as $key => $data) {
-        $arr[] = [
-            'uid'       => $key,
-            'required'  => $data['required'],
-            'shiftId'   => $data['shiftId'],
-            'workers'   => $data['workers']
-        ];
-    }
-
-    return $arr;
-}
-
 $plans = [];
 foreach(dbConn::query("SELECT *, IF(editable > CURRENT_TIMESTAMP, 1, 0) AS editable FROM :prefix:plan 
                        WHERE deleted = 0 AND public > CURRENT_TIMESTAMP ORDER BY position ASC") as $pl) {
 
-    $groups = groupShifts($pl['name']);   // array of the plan, merged by productions and shifts
+    $groups = ShiftMerger::groupShifts($pl['name']);   // array of the plan, merged by productions and shifts
 
     $shiftsDb = [];
     foreach(dbConn::query("SELECT 
@@ -178,7 +103,7 @@ foreach(dbConn::query("SELECT *, IF(editable > CURRENT_TIMESTAMP, 1, 0) AS edita
         'urlencoded'    => urlencode($pl['name']),
         'readonly'      => !$pl['editable'],
         'groups'        => $groups,
-        'shifts'        => getDetailedShifts($pl['name'])
+        'shifts'        => PersistenceService::getShiftsWithWorkers($pl['name'])
     ];
 }
 

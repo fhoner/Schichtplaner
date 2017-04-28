@@ -11,7 +11,7 @@ DEFINE("WEBMASTER", "info@domain.de");                      // email of webmaste
 require("dbConn.php");
 require("template.php");
 require("emailSettings.php");
-require("Schichtplaner/PersistenceService.php");
+require("Schichtplaner/autoload.php");
 require("vendor/autoload.php");
 
 /* DATABASE SETUP */

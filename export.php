@@ -3,6 +3,8 @@
 require("config.php");
 require("functions.php");
 
+use \Schichtplaner\ShiftMerger;
+
 $colors = array(
     "ffcb99",  
     "ccffff",
@@ -32,8 +34,7 @@ $type = strtolower($_GET['type']);
  
 if($type == "pdf")
 {    
-    $shifts = groupShifts($plan);   // array containing all data of the plan, grouped by productions and shifts
-    //echo "<pre>".json_encode($shifts, JSON_PRETTY_PRINT)."</pre>";
+    $shifts = ShiftMerger::groupShifts($plan);   // array containing all data of the plan, grouped by productions and shifts
 
     $tabContent = new template("pdf/plan.content");
     $tabContent->insert("active", "");
