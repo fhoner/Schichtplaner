@@ -138,9 +138,9 @@
     {{#workers}}
         <div class="worker {{^isFixed}}not-fixed{{/isFixed}}" data-name="{{name}}" data-email="{{#hasEmail}}true{{/hasEmail}}{{^hasEmail}}false{{/hasEmail}}">
             <div class="user-name">
-                <span class="glyphicon glyphicon-question-sign not-fixed-hint" aria-hidden="true"></span>
-                <span class="glyphicon glyphicon-ok-sign is-fixed-hint" aria-hidden="true"></span>
-                <span class="top glyphicon glyphicon-exclamation-sign missing-email-hint" aria-hidden="true" style="font-size: 12px; color: rgb(51, 51, 51); {{#hasEmail}}display:none;{{/hasEmail}}" title="" data-original-title="E-Mail Adresse fehlt"></span>
+                <span class="glyphicon glyphicon-question-sign not-fixed-hint" aria-hidden="true" data-toggle="tooltip" title="Vorläufig"></span>
+                <span class="glyphicon glyphicon-ok-sign is-fixed-hint" aria-hidden="true" data-toggle="tooltip" title="Fix"></span>
+                <span class="glyphicon glyphicon-envelope missing-email-hint" data-toggle="tooltip" title="Fehlende E-Mail Adresse" aria-hidden="true" style="{{#hasEmail}}display:none;{{/hasEmail}}"></span>
                 <span class="name-inline">{{name}}</span>
             </div>
             <div class="user-email">{{#hasEmail}}true{{/hasEmail}}{{^hasEmail}}false{{/hasEmail}}</div>

@@ -101,11 +101,16 @@ body > .container {
 .user-email {
     display:none;
 }
-.not-fixed-hint, .is-fixed-hint {
+.not-fixed-hint, 
+.is-fixed-hint, 
+.missing-email-hint {
     font-size:12px;
 }
 .not-fixed-hint {
     color: rgba(255, 100, 0, 0.8);
+}
+.missing-email-hint {
+    color: rgba(0, 0, 0, 0.8);
 }
 .is-fixed-hint {
     color: rgba(28, 169, 0, 0.8);

@@ -453,6 +453,8 @@ $(document).ready(function () {
         position: 'topRight'
     });
 
+    $("body").tooltip({ selector: '[data-toggle=tooltip]' });
+
     $(window).resize(function() {
         var mobile = $(window).width() <= MOBILE_SCREEN_WIDTH;
         if (mobile != printedPlans.mobile) {
