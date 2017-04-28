@@ -10,8 +10,9 @@ DEFINE("WEBMASTER", "info@domain.de");                      // email of webmaste
 /* REQUIRED */
 require("dbConn.php");
 require("template.php");
-require_once("emailSettings.php");
-require_once("vendor/autoload.php");
+require("emailSettings.php");
+require("Schichtplaner/PersistenceService.php");
+require("vendor/autoload.php");
 
 /* DATABASE SETUP */
 dbConn::setHost("localhost");

@@ -23,9 +23,9 @@ module.exports = function (grunt) {
                         src: [
                             'node_modules/jquery/dist/jquery.min.js',
                             'node_modules/bootstrap/dist/js/bootstrap.min.js',
-                            'node_modules/bootbox/bootbox.min.js',
                             'node_modules/editable-table/mindmup-editabletable.js',
                             'node_modules/izitoast/dist/js/iziToast.min.js',
+                            'node_modules/bootbox/bootbox.min.js',
                             'js/notify.js'
                         ],
                         nonull: true
@@ -36,6 +36,7 @@ module.exports = function (grunt) {
                             'dist/js/dependencies.js',
                             'node_modules/sortablejs/Sortable.min.js',
                             'node_modules/mustache/mustache.min.js',
+                            'node_modules/easy-autocomplete/dist/jquery.easy-autocomplete.min.js',
                             'js/user.main.js'
                         ],
                         nonull: true
@@ -75,6 +76,7 @@ module.exports = function (grunt) {
                         src: [
                             'dist/css/core.css',
                             'node_modules/magic-input/dist/magic-input.min.css',
+                            'node_modules/easy-autocomplete/dist/easy-autocomplete.min.css',
                             'template/**.css',
                         ]
                     },

@@ -67,6 +67,14 @@ td.td-user {
     margin-top:5px;
     margin-bottom:15px;
 }
+#add-name, #add-email {
+    margin: 0px;
+}
+.vertical-placeholder-15 {
+    height: 15px;
+    margin: 0px;
+    padding: 0px;
+}
 .shift-disabled {
     cursor: not-allowed !important;
 }

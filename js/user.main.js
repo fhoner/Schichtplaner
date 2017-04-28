@@ -281,6 +281,60 @@ $.urlParam = function (name) {
     }
 }
 
+function addAutocomplete(data) {
+    data.forEach(function(el) {
+        el.descriptionName = el.email + ", " + el.plan;
+        el.descriptionEmail = el.name + ", " + el.plan;
+    });
+
+    var names = {
+        data: data,
+        adjustWidth: false,
+        theme: 'bootstrap',
+        getValue: "name",
+        template: {
+            type: "description",
+            fields: {
+                description: "descriptionName"
+            }
+        },
+        list: {
+            match: {
+                enabled: true
+            },
+            onSelectItemEvent: function() {
+                var value = $("#add-name").getSelectedItemData().email;
+                $("#add-email").val(value).trigger("change");
+            }
+        }  
+    };
+    $("#add-name").easyAutocomplete(names);
+
+
+    var emails = {
+        data: data,
+        adjustWidth: false,
+        theme: 'bootstrap',
+        getValue: "email",
+        template: {
+            type: "description",
+            fields: {
+                description: "descriptionEmail"
+            }
+        },
+        list: {
+            match: {
+                enabled: true
+            },
+            onSelectItemEvent: function() {
+                var value = $("#add-email").getSelectedItemData().name;
+                $("#add-name").val(value).trigger("change");
+            }
+        }  
+    };
+    $("#add-email").easyAutocomplete(emails);
+}
+
 /**
  * Adds the edit shift handler on shift cells.
  */
@@ -304,8 +358,6 @@ function addEditShiftHandler() {
         editObject = $(this);
         deletedArr = new Array();
 
-        $("#add-name").parent().removeClass("has-error");
-        $("#add-email").parent().removeClass("has-error");
         $("#add-name").val("");
         $("#add-email").val("");
         $("#editEntry").find(".modal-title").html($(this).data("shift-name") + " | " +
@@ -347,6 +399,8 @@ function addEditShiftHandler() {
                     handle: ".user-sort",
                     animation: 150
                 });
+
+                addAutocomplete(res.autocomplete);
 
                 // enable all controls
                 $('#table-edit').editableTableWidget();
@@ -455,11 +509,9 @@ $(document).ready(function () {
     $("#btn-add-user").click(function () {
         var err = false;
         if ($("#add-name").val().length < 5) {
-            $("#add-name").parent().addClass("has-error");
+            Notify.error("Fehler", 'Geben Sie einen gültigen Namen ein (<span style="font-style: italic;">Vorname Nachname</span>)');
             err = true;
         }
-        else
-            $("#add-name").parent().removeClass("has-error");
 
         if (!err) {
             $("#table-edit tbody").append("<tr><td class=\"tr-debug user-edit-uid\">" + escapeHtml($("#add-name").val()) +

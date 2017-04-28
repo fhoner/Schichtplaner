@@ -29,8 +29,9 @@ foreach (dbConn::query("SELECT name, email, isFixed FROM :prefix:worker WHERE
 
 header("content-type: application/json");
 echo json_encode(array(
-    "success"   => true,
-    "workers"   => $workers
+    "success"       => true,
+    "workers"       => $workers,
+    "autocomplete"  => Schichtplaner\PersistenceService::getAllWorkers()
 ));
 
 ?>

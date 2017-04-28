@@ -97,12 +97,12 @@
                         <hr />
                     </div>
                     <h4>Helfer hinzufügen</h4> 
-                    Name
-                    <div>
+                    <div class="form-group">
+                        <label for="add-name">Name</label>
                         <input type="text" class="form-control add-worker" placeholder="Vorname Nachname" id="add-name">
                     </div>
-                    E-Mail
-                    <div>
+                    <div class="form-group">
+                        <label for="add-email">E-Mail</label>
                         <input type="text" class="form-control add-worker" placeholder="name@domain.com" id="add-email">
                     </div>
                     <button type="button" class="btn btn-default pull-right add-worker" id="btn-add-user">
