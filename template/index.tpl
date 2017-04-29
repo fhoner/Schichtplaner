@@ -132,6 +132,20 @@
         </p>
     </footer>
     
+    <!-- edit shift worker row template -->
+    <script id="editShiftWorkerRowTpl" type="text/template">
+        {{#workers}}
+        <tr>
+            <td class="tr-debug user-edit-uid" tabindex="1">{{uid}}</td>
+            <td class="user-sort readonly" tabindex="1"><i class="fa fa-arrows"></i></td>
+            <td class="user-edit-name" tabindex="1">{{name}}</td>
+            <td class="user-edit-email" tabindex="1">{{email}}</td>
+            <td class="readonly user-edit-is-fixed-td" tabindex="1"><label><input type="checkbox" class="mgc-switch mgc-sm user-edit-is-fixed" {{#isFixed}}checked{{/isFixed}}></label></td>
+            <td class="tr-debug user-edit-action" tabindex="1">{{action}}</td>
+            <td tabindex="1"><div class="delete-user"><i class="fa fa-trash"></i></div></td>
+        </tr>
+        {{/workers}}
+    </script>
 
     <!-- Shift cell template -->
     <script id="cellTpl" type="text/template">

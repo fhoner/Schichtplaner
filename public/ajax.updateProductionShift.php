@@ -270,27 +270,29 @@ try
         
     
     // create html output and send to client
-    $html = "";
-    foreach(dbConn::query("SELECT * FROM :prefix:worker WHERE production = :0 AND shift = :1 ORDER BY position ASC", 
+    $workers = [];
+    foreach(dbConn::query("SELECT name, email, isFixed
+                            FROM :prefix:worker 
+                            WHERE production = :0 AND shift = :1 
+                            ORDER BY position ASC", 
         $d['production'], $d['shiftId']) as $r)
     {
-        $worker = new template("worker");
-        $worker->insert("fixed", $r['isFixed'] ? "" : "not-fixed");
-        $worker->insert("name", $r['name']);
-        $worker->insert("email", $r['email'] == null || $r['email'] == "" ? "" : "true");
-        $html .= $worker->getOutput();
+        $r['hasEmail'] = strlen($r['email']) > 0;
+        $r['isFixed'] = (boolean) $r['isFixed'];
+        $workers[] = $r;
     }
     
-    
+    header("content-type: application/json");
     echo json_encode(array(
-        "result" => "SUCCESS",
-        "html" => $html
+        "success" => true,
+        "workers" => $workers
     ));
 }
 catch(Exception $ex)
 {
+    header("content-type: application/json");
     echo json_encode(array(
-        "result" => "ERROR",
+        "success" => false,
         "message" => $ex->getMessage()
     ));
 }

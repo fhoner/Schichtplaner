@@ -82,7 +82,7 @@ function loadContent(plan) {
         success: function(res) {
             res.mobile = $(window).width() <= MOBILE_SCREEN_WIDTH;
             printedPlans = res;
-            var template = $('#tableTpl').html();
+            var template = $("#tableTpl").html();
             var html = Mustache.to_html(template, res);
             $("#plansLoading").hide();
             $('#plansContent').html(html);
@@ -145,7 +145,7 @@ function fillShiftCells(data) {
             var $td = $("#plansContent").find("[data-unique='" + shift.uid + "']");
             $td.data('shift-id', shift.shiftId);
             $td.data('required', shift.required);
-            var template = $('#cellTpl').html();
+            var template = $("#cellTpl").html();
             var html = Mustache.to_html(template, shift);
             $td.append(html);
         });
@@ -382,22 +382,13 @@ function addEditShiftHandler() {
             },
             success: function(res) {
                 var isReadonly = $(editObject).closest("table").hasClass("plan-readonly");
-                var tblBody = "";
                 res.workers.forEach(function (el, index) {
-                    tblBody += "<tr><td class=\"tr-debug user-edit-uid\">" + el.name + "\n" +
-                        el.email + "</td>" +
-                        (!isReadonly ? "<td class=\"user-sort readonly\"><i class=\"fa fa-arrows\"></i></td>" : "") +
-                        "<td class=\"user-edit-name\">" +
-                        el.name +
-                        "</td><td class=\"user-edit-email\">" +
-                        el.email + "</td>" +
-                        "<td class=\"readonly user-edit-is-fixed-td\">" +
-                        "<label><input type=\"checkbox\" class=\"mgc-switch mgc-sm user-edit-is-fixed\" " +
-                        (el.isFixed ? "checked" : "") + "></label></td>" +
-                        "<td class=\"tr-debug user-edit-action\">update</td>" +
-                        "<td><div class=\"delete-user\"><i class=\"fa fa-trash\"></i></div></td></tr>";
+                    el.uid = el.name + "\n" + el.email;
+                    el.action = "update";
                 });
-                $("#table-edit tbody").html(tblBody);
+                var template = $("#editShiftWorkerRowTpl").html();
+                var html = Mustache.to_html(template, res);
+                $("#table-edit tbody").html(html);
                 
                 var el = document.getElementById('table-edit-tbody');
                 var sortable = Sortable.create(el, {
@@ -521,15 +512,21 @@ $(document).ready(function () {
         }
 
         if (!err) {
-            $("#table-edit tbody").append("<tr><td class=\"tr-debug user-edit-uid\">" + escapeHtml($("#add-name").val()) +
-                "\n" + escapeHtml($("#add-email").val()) + "</td>" +
-                "<td class=\"user-sort readonly\" tabindex=\"1\"><i class=\"fa fa-arrows\"></i></td>" +
-                "<td class=\"user-edit-name\">" + escapeHtml($("#add-name").val()) +
-                "</td><td class=\"user-edit-email\">" + escapeHtml($("#add-email").val()) + "</td>" +
-                "<td class=\"readonly user-edit-is-fixed-td\" style=\"text-align:center;\">" +
-                "<input type=\"checkbox\" class=\"mgc-switch mgc-sm user-edit-is-fixed\" checked></td>" +
-                "<td class=\"tr-debug user-edit-action\">create</td>" +
-                "<td><div class=\"delete-user\"><i class=\"fa fa-trash\"></i></div></td></tr>");
+            var data = {
+                workers: [
+                    {
+                        uid: $("#add-name").val() + "\n" + $("#add-email").val(),
+                        name: $("#add-name").val(),
+                        email: $("#add-email").val(),
+                        checked: true,
+                        action: "create"
+                    }
+                ]
+            }
+            var template = $("#editShiftWorkerRowTpl").html();
+            var html = Mustache.to_html(template, data);
+
+            $("#table-edit tbody").append(html);
             $("#add-name").val("");
             $("#add-email").val("");
             $('#table-edit').editableTableWidget();
@@ -613,19 +610,13 @@ $(document).ready(function () {
                     data: obj
                 },
                 success: function (result) {
-                    result = JSON.parse(result);
-
-                    if (result['result'] != "SUCCESS") {
+                    if (!result.success) {
                         Notify.error("Fehler", "Die Änderungen wurden nicht gespeichert:<br/><br/>" + result['message']);
                     }
-                    else {
-                        // update cell html both in desktop and mobile section                    
-                        $("td").each(function () {
-                            if ($(this).data("unique") == $(editObject).data("unique")) {
-                                $(this).find(".worker").remove();
-                                $(this).html($(this).html() + result['html']);
-                            }
-                        });
+                    else {      
+                        var template = $("#cellTpl").html();
+                        var html = Mustache.to_html(template, result);
+                        $(editObject).html(html);
 
                         $("#editEntry").modal("hide");
                         updateCells();
