@@ -1,9 +1,0 @@
-#	Felix Honer
-#	2016/01/24
-#	customer@felix-honer.com
-
-Options +FollowSymlinks
-RewriteEngine On
-RewriteBase /planer/
-
-DirectoryIndex index.php
