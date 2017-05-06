@@ -25,7 +25,7 @@
             <center>
                 <div class="navbar-collapse collapse" id="navbar-main">
                     <form class="navbar-form navbar-right" role="search" id="loginForm">
-                        <span id="loggedInAs" ${logout-input-visible}$>Angemeldet als: <strong>ausschuss</strong></span>
+                        <span id="loggedInAs" ${logout-input-visible}$>Angemeldet als: <strong>${username}$</strong></span>
                         <div class="form-group login-input" ${login-input-visible}$>
                             <input type="text" class="form-control" name="loginUsername" id="loginUsername" placeholder="Benutzername">
                         </div>
