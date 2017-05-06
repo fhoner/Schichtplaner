@@ -142,7 +142,7 @@ try
                                     $d['production'],
                                     $_POST['plan'],
                                     (int)$d['shiftId'],
-                                    $val['isFixed'] == "true",
+                                    $val['isFixed'] == "true" ? 1 : 0,
                                     $position);
             }
             else if($val['action'] == "update")
@@ -159,7 +159,7 @@ try
                                                                 $d['shiftId'],
                                                                 htmlspecialchars($arr[0]),
                                                                 htmlspecialchars($arr[1]),
-                                                                $val['isFixed'] == "true",
+                                                                $val['isFixed'] == "true" ? 1 : 0,
                                                                 $position
                                                                 );
             }
