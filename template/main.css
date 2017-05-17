@@ -115,6 +115,29 @@ body > .container {
 .is-fixed-hint {
     color: rgba(28, 169, 0, 0.8);
 }
+.plan-tab-name {
+    display: inline-block;
+    padding-right: 10px;
+}
+.required-worker-hint {
+    position: absolute;
+    right: 7px;
+    top: 7px;
+    display:inline-block;
+    margin-left:5px;
+    padding-top:1px;
+    font-size:7px; 
+    width:13px;
+    height: 13px;
+    -moz-border-radius: 9px; 
+    -webkit-border-radius: 9px; 
+    border-radius: 9px;
+    text-align:center;
+}
+
+.nav-tabs .tooltip-inner {
+    min-width: 120px;
+}
 
 @media (max-width:700px) {
     .plan-desktop {

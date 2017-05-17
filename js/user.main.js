@@ -129,6 +129,7 @@ function loadContent(plan) {
             updateCells();
             updateWorkersFixedInfo(null);
             levelRows();
+            updateRequiredWorkerHeader();
             addEditShiftHandler();
         }
     });
@@ -431,6 +432,59 @@ function addEditShiftHandler() {
     });
 }
 
+/**
+ * Gets the required worker count of a plan by its DOM elements.
+ * 
+ * @param {string} plan Name of the plan.
+ * @return {int} Count of required workers.
+ */
+function getRequiredWorkerCount(plan) {
+    var count = 0;
+    var tbl = $("body").find("[data-plan-name='" + plan + "']");
+
+    tbl.each(function() {
+        $(this).find(".td-user-max").each(function() {
+            count += parseInt($(this).text());
+        });
+    });
+
+    return count;
+}
+
+/**
+ * Updates all tab header required worker hints.
+ */
+function updateRequiredWorkerHeader() {
+    $(".plan-tab-name").each(function() {
+        var name = $(this).text();
+        var requiredCount = getRequiredWorkerCount(name);
+        requiredCount = requiredCount > 0 ? requiredCount : 0;
+        var $hint = $(this).parent().find(".required-worker-hint");
+        $hint.text(requiredCount);
+
+        if ($hint.parent().data("readonly")) {
+            $hint.css({
+                "background-color": "#eee",
+                "color": "#888"
+            });
+        } else if (requiredCount > 0) {
+            $hint
+                .css({
+                    "background-color": "#B33A3A",
+                    "color": "#fff"
+                })
+                .attr("title", requiredCount + " Helfer fehlen");
+        } else {
+            $hint
+                .css({
+                    "background-color": "#89C057",
+                    "color": "#fff"
+                })
+                .attr("title", "Keine Helfer fehlen");
+        }
+    });
+}
+
 $(document).ready(function () {
 
     setIsLoggedIn(loginRevisit);
@@ -606,7 +660,7 @@ $(document).ready(function () {
                 url: "public/ajax.updateProductionShift.php",
                 method: "POST",
                 data: {
-                    plan: $(".nav-tabs").find(".active").find("a").text(),
+                    plan: $(".nav-tabs").find(".active").find(".plan-tab-name").text(),
                     data: obj
                 },
                 success: function (result) {
@@ -622,6 +676,7 @@ $(document).ready(function () {
                         updateCells();
                         levelRows();
                         updateWorkersFixedInfo(editObject);
+                        updateRequiredWorkerHeader();
                         Notify.success("Gespeichert", 
                             '<span style="font-weight: bold;">' +
                             $(editObject).data("shift-name") +

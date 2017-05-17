@@ -169,7 +169,10 @@
         <ul class="nav nav-tabs" role="tablist" style="margin:10px;">
             {{#plans}}
             <li role="presentation" class="">
-                <a href="#{{uid}}" aria-controls="{{uid}}" role="tab" data-toggle="tab"><strong>{{name}}</strong></a>
+                <a href="#{{uid}}" aria-controls="{{uid}}" role="tab" data-toggle="tab" data-readonly="{{readonly}}">
+                    <strong class="plan-tab-name">{{name}}</strong>
+                    <span class="required-worker-hint" data-toggle="tooltip" title=""></span>
+                </a>
             </li>
             {{/plans}}
         </ul>
@@ -239,7 +242,7 @@
                             {{#shifts}}
                                 <tr style="height: 97px;">
                                     <td class="td-time">{{from}}<br>-<br>{{to}}</td>
-                                        <td class="td-user" id="{{uid}}-{{productionUid}}-{{from}}-{{to}}" data-shift-name="{{productionName}}" data-unique="{{uid}}-{{productionUid}}-{{from}}-{{to}}">
+                                    <td class="td-user" id="{{uid}}-{{productionUid}}-{{from}}-{{to}}" data-shift-name="{{productionName}}" data-unique="{{uid}}-{{productionUid}}-{{from}}-{{to}}">
                                 </tr>
                             {{/shifts}}
                             </tbody>
