@@ -47,7 +47,6 @@ module.exports = function (grunt) {
                             'dist/js/dependencies.js',
                             'node_modules/bootstrap-datepicker/dist/js/bootstrap-datepicker.min.js',
                             'node_modules/bootstrap-switch/dist/js/bootstrap-switch.min.js',
-                            'node_modules/bootstrap-formhelpers/dist/js/bootstrap-formhelpers.min.js',
                             'js/admin**.js',
                         ],
                         nonull: true
@@ -86,7 +85,6 @@ module.exports = function (grunt) {
                             'dist/css/core.css',
                             'node_modules/jquery-ui-dist/jquery-ui.min.css',
                             'node_modules/bootstrap-datepicker/dist/css/bootstrap-datepicker3.standalone.min.css',
-                            'node_modules/bootstrap-formhelpers/dist/css/bootstrap-formhelpers.min.css',
                             'node_modules/bootstrap-switch/dist/css/bootstrap3/bootstrap-switch.min.css',
                             'template/admin/**.css',
                         ]
