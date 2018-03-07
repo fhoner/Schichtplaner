@@ -80,6 +80,11 @@ function loadContent(plan) {
         url: "public/ajax.getPlans.php",
         method: "POST",
         success: function(res) {
+            if (!res.success) {
+                Notify.error("Fehler", res.error);
+                return;
+            }
+
             res.mobile = $(window).width() <= MOBILE_SCREEN_WIDTH;
             printedPlans = res;
             var template = $("#tableTpl").html();

@@ -429,6 +429,22 @@ class dbConn
 
         return $result;
 	}
+
+    public static function testConnection() {
+        try {
+            $db = new pdo("mysql:" .
+                "host=" . dbConn::$host . ";" .
+                "dbname=" . dbConn::$database . ";" .
+                "charset=UTF8",
+                dbConn::$username,
+                dbConn::$password
+            );
+            return true;
+        }
+        catch (PDOException $ex) {
+            return false;
+        }
+    }
 }
 
 ?>
