@@ -425,6 +425,7 @@ function addEditShiftHandler() {
                     $("#save-shift").prop("disabled", true);
                     $("#table-edit tbody").find("td").addClass("readonly"); // make cells readonly
                     $("#thSortUsers").hide();
+                    $(".user-sort").hide();
                 }
                 if (max <= $(editObject).find(".worker").length) {
                     $(".add-worker").prop("disabled", true);
