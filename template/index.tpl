@@ -125,9 +125,9 @@
     <footer class="footer">
         <p class="text-muted">
             <small>
-                Schichtplaner by Felix Honer - 
-                <i class="fa fa-github" aria-hidden="true"></i> 
-                <a href="https://github.com/fhoner/Schichtplaner" target="_blank">fhoner/schichtplaner</a>
+                made for <i class="fa fa-music" aria-hidden="true"></i> <i class="fa fa-beer" aria-hidden="true"></i> <span class="space">-</span>
+                <i class="fa fa-github" aria-hidden="true"></i>
+                <a href="https://github.com/fhoner/Schichtplaner" target="_blank">fhoner/schichtplaner</a> <span class="version">${version}$</span>
             </small>
         </p>
     </footer>

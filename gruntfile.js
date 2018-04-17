@@ -96,15 +96,26 @@ module.exports = function (grunt) {
         clean: [
             'dist/js/dependencies.js',
             'dist/css/core.css'
-        ]
+        ],
+
+        gitInfo: {
+            output: 'version.json',
+            fields: [
+                'commit',
+                'short',
+                'timestamp',
+                'author'
+            ]
+        }
     });
 
     grunt.loadNpmTasks('grunt-contrib-uglify');
     grunt.loadNpmTasks('grunt-contrib-cssmin');
     grunt.loadNpmTasks('grunt-contrib-copy');
     grunt.loadNpmTasks('grunt-contrib-clean');
+    grunt.loadNpmTasks('grunt-git-info');
     
-    grunt.registerTask('default', ['uglify', 'cssmin', 'copy', 'clean']);
+    grunt.registerTask('default', ['uglify', 'cssmin', 'copy', 'clean', 'gitInfo']);
     grunt.registerTask('css', ['cssmin', 'copy', 'clean']);
 
 };

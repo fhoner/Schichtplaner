@@ -481,7 +481,8 @@ class template
         {
             $tpl->insert($key, $value);
         }
-        
+
+        $tpl->removeVariables();
         return $tpl->getOutput();
     }
 }

@@ -91,12 +91,18 @@ body > .container {
     position: absolute;
     bottom: 0;
     width: 100%;
-    /* Set the fixed height of the footer here */
-    height: 60px;
     background-color: #f5f5f5;
 }
 .text-muted {
-    margin:20px;
+    margin:15px;
+    line-height: 15px;
+}
+.footer .space {
+    margin: 0px 8px 0px 8px;
+}
+.footer .version a {
+    font-size: 90%;
+    color: inherit;
 }
 .user-email {
     display:none;

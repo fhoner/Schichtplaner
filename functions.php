@@ -78,4 +78,20 @@ function returnResult($success, $message, $additional = null) {
 	die();
 }
 
+/**
+ * Gets a string which indicates the current version by git short hash.
+ *
+ * @return Formatted version string as html.
+ */
+function getVersionString() {
+    $filename = "version.json";
+    if (file_exists($filename)) {
+        $json = json_decode(file_get_contents($filename), true);
+        if (json_last_error() == JSON_ERROR_NONE) {
+            return "<a href=\"https://github.com/fhoner/Schichtplaner/commit/" . $json['commit'] . "\" target='\"_blank\"'>#" . $json['short'] . "</a>";
+        }
+    }
+    return "";
+}
+
 ?>
