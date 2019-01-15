@@ -1,0 +1,40 @@
+<?php
+
+$db = [
+    
+];
+
+/* HOST SETUP */
+DEFINE("URL", "http://localhost/planer");                   // full url
+DEFINE("BASEDIR", $_SERVER['DOCUMENT_ROOT'] . "/planer/");	// base dir of cms including document root
+DEFINE("ROOT", "/planer/");									// base dir of cms without document root
+DEFINE("ORGANISATION", "Organisazion Ltd.");                // organisation name
+DEFINE("WEBMASTER", "info@domain.de");                      // email of webmaster
+
+/* REQUIRED */
+require("dbConn.php");
+require("template.php");
+require("emailSettings.php");
+require("Schichtplaner/autoload.php");
+require("vendor/autoload.php");
+
+/* DATABASE SETUP */
+dbConn::setHost(getenv(DB_HOST));
+dbConn::setDatabase(DB_NAME);
+dbConn::setUsername(DB_USER);
+dbConn::setPassword(DB_PASSWORD);
+dbConn::setTablePrefix(DB_PREFIX);
+
+/* EMAIL SETUP */
+emailSettings::setHost("localhost");
+emailSettings::setUsername("user@domain.com");
+emailSettings::setPassword("53cur3");
+emailSettings::setSender(WEBMASTER);
+emailSettings::setMethod(emailSendMethod::PHPMAILER);
+
+/* DO NOT CHANGE */
+DEFINE("TEMPLATEDIR", BASEDIR . "template/");
+DEFINE("PLUGINDIR", BASEDIR . "plugins/");
+DEFINE("FRONTENDURL", URL);
+
+?>
