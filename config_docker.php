@@ -2,9 +2,9 @@
 
 
 /* HOST SETUP */
-DEFINE("URL", "http://localhost/planer");                   // full url
-DEFINE("BASEDIR", $_SERVER['DOCUMENT_ROOT'] . "/planer/");	// base dir of cms including document root
-DEFINE("ROOT", "/planer/");									// base dir of cms without document root
+DEFINE("URL", "http://localhost/");                   // full url
+DEFINE("BASEDIR", $_SERVER['DOCUMENT_ROOT'] . "/");	// base dir of cms including document root
+DEFINE("ROOT", "/");									// base dir of cms without document root
 DEFINE("ORGANISATION", "Organisazion Ltd.");                // organisation name
 DEFINE("WEBMASTER", "info@domain.de");                      // email of webmaster
 
