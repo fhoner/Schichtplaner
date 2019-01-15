@@ -1,8 +1,5 @@
 <?php
 
-$db = [
-    
-];
 
 /* HOST SETUP */
 DEFINE("URL", "http://localhost/planer");                   // full url
@@ -20,10 +17,10 @@ require("vendor/autoload.php");
 
 /* DATABASE SETUP */
 dbConn::setHost(getenv(DB_HOST));
-dbConn::setDatabase(DB_NAME);
-dbConn::setUsername(DB_USER);
-dbConn::setPassword(DB_PASSWORD);
-dbConn::setTablePrefix(DB_PREFIX);
+dbConn::setDatabase(getenv(DB_NAME));
+dbConn::setUsername(getenv(DB_USER));
+dbConn::setPassword(getenv(DB_PASSWORD));
+dbConn::setTablePrefix(getenv(DB_PREFIX));
 
 /* EMAIL SETUP */
 emailSettings::setHost("localhost");
