@@ -16,11 +16,11 @@ require("Schichtplaner/autoload.php");
 require("vendor/autoload.php");
 
 /* DATABASE SETUP */
-dbConn::setHost(getenv(DB_HOST));
-dbConn::setDatabase(getenv(DB_NAME));
-dbConn::setUsername(getenv(DB_USER));
-dbConn::setPassword(getenv(DB_PASSWORD));
-dbConn::setTablePrefix(getenv(DB_PREFIX));
+dbConn::setHost(getenv("DB_HOST"));
+dbConn::setDatabase(getenv("DB_NAME"));
+dbConn::setUsername(getenv("DB_USER"));
+dbConn::setPassword(getenv("DB_PASSWORD"));
+dbConn::setTablePrefix(getenv("DB_PREFIX"));
 
 /* EMAIL SETUP */
 emailSettings::setHost("localhost");
