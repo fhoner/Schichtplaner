@@ -1,0 +1,29 @@
+version: "2"
+
+services:
+  schichtplaner-web:
+    build:
+      context: .
+      dockerfile: ./Dockerfile-web
+      args:
+        - DB_HOST=schichtplaner-db
+        - DB_NAME=schichtplaner
+        - DB_USER=root
+        - DB_PASSWORD=root
+    ports: 
+      - "8080:80"
+    links:
+      - schichtplaner-db
+    depends_on:
+      - schichtplaner-db
+    network_mode: bridge
+
+  schichtplaner-db:
+    image: "mysql:5.7"
+    command: mysqld
+    volumes:
+      - ./dbinit:/docker-entrypoint-initdb.d
+    environment:
+      - MYSQL_ROOT_PASSWORD=root
+      - MYSQL_DATABASE=schichtplaner
+    network_mode: bridge

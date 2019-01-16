@@ -1,5 +1,6 @@
 <?php
 
+
 /* HOST SETUP */
 DEFINE("URL", "http://localhost/planer");                   // full url
 DEFINE("BASEDIR", $_SERVER['DOCUMENT_ROOT'] . "/planer/");	// base dir of cms including document root

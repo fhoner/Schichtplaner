@@ -1,5 +1,9 @@
 FROM keopx/apache-php:7.3
 
+ENV DB_HOST=schichtplaner-db
+ENV DB_NAME=schichtplaner
+ENV DB_USER=root
+ENV DB_PASSWORD=root
 ENV DB_PREFIX=planer_
 
 RUN curl -sL https://deb.nodesource.com/setup_11.x | bash - \
