@@ -3,8 +3,7 @@
 session_start();
 
 require("../config.php");
-require(BASEDIR . "functions.php");
-require(BASEDIR . "transaction.php");
+require("../autoload.php");
 
 if (!isLoggedin()) {
     die(json_encode(array(

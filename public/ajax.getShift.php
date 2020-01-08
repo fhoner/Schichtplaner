@@ -3,7 +3,7 @@
 session_start();
 
 require("../config.php");
-require(BASEDIR . "functions.php");
+require("../autoload.php");
 
 if (!isLoggedin()) {
     die(json_encode(array(
@@ -33,5 +33,3 @@ echo json_encode(array(
     "workers"       => $workers,
     "autocomplete"  => Schichtplaner\PersistenceService::getAllWorkers()
 ));
-
-?>

@@ -3,7 +3,7 @@
 session_start();
 
 require("config.php");
-require("functions.php");
+require("autoload.php");
 
 echo template::create("index", array(
     "organisation"          => ORGANISATION,
@@ -13,5 +13,3 @@ echo template::create("index", array(
     "logout-input-visible"  => !isLoggedin() ? 'style="display:none;"' : "",
     "version"               => getVersionString()
 ));
-
-?>

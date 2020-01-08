@@ -1,10 +1,10 @@
 <?php
 
 require("../config.php");
-require(BASEDIR . "functions.php");
+require("../autoload.php");
 
-use \Schichtplaner\ShiftMerger;
-use \Schichtplaner\PersistenceService;
+use Schichtplaner\PersistenceService;
+use Schichtplaner\ShiftMerger;
 
 function prodContainsShift($prod, $shift, $haystack) {
     foreach ($haystack as $db) {

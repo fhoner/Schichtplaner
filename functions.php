@@ -42,7 +42,7 @@ function isLoggedin() {
         return false;
 
     $userdb = dbConn::queryRow("SELECT * FROM :prefix:user WHERE name = :0", $_SESSION['user']);
-    $logout = $userdb == null || $_SESSION['userData']['lastchange'] != $userdb['lastchange'];
+    $logout = $userdb == null;
     return isset($_SESSION['user']) && !$logout;
 }
 

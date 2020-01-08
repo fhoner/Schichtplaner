@@ -3,7 +3,8 @@
     "description": "tool for managing schedules for events",
     "require": {
         "phpmailer/phpmailer": "^5.2",
-        "dompdf/dompdf": "^0.7.0"
+        "dompdf/dompdf": "^0.7.0",
+        "guzzlehttp/guzzle": "^6.5"
     },
     "license": "NOLICENSE",
     "authors": [
