@@ -1,12 +1,14 @@
 <?php
 
+use Schichtplaner\ConfigReader;
+
 /**
  * Makes a string URL valid by removing unallowed characters.
  *
  * @param string $string The string to make URL valid.
  * @return string URL valid string.
  */
-function seoUrl($string) {    
+function seoUrl($string) {
     $string = preg_replace("/[^a-zA-Z0-9_\s-]/", "", $string);  // Make alphanumeric (removes all other characters)
     $string = preg_replace("/[\s-]+/", " ", $string);   // Clean up multiple dashes or whitespaces
     $string = preg_replace("/[\s_]/", "-", $string);    // Convert whitespaces and underscore to dash
@@ -41,8 +43,11 @@ function isLoggedin() {
     if (!isset($_SESSION['user']) || !isset($_SESSION['userData']))
         return false;
 
-    $userdb = dbConn::queryRow("SELECT * FROM :prefix:user WHERE name = :0", $_SESSION['user']);
-    $logout = $userdb == null;
+    $logout = false;
+    if (ConfigReader::getConfigOption('auth/type') === 'db') {
+        $userdb = dbConn::queryRow("SELECT * FROM :prefix:user WHERE name = :0", $_SESSION['user']);
+        $logout = $userdb == null;
+    }
     return isset($_SESSION['user']) && !$logout;
 }
 
