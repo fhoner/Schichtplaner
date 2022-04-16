@@ -2,7 +2,7 @@
     "name": "fhoner/schichtplaner",
     "description": "tool for managing schedules for events",
     "require": {
-        "phpmailer/phpmailer": "^5.2",
+        "phpmailer/phpmailer": "^6.5",
         "dompdf/dompdf": "^1.2.1",
         "guzzlehttp/guzzle": "^6.5"
     },
