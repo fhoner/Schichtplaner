@@ -95,10 +95,10 @@ if(count($errors) > 0)
     die();
 }
 
-if(dbConn::querySingle("SELECT COUNT(*) FROM :prefix:plan WHERE 
-                            name = :0
-                            public < CURRENT_TIMESTAMP OR 
-                            editable < CURRENT_TIMESTAMP", $_POST['plan']) > 1)
+if(dbConn::querySingle("SELECT COUNT(*) FROM :prefix:plan WHERE
+                            name = :0 AND
+                            (public < CURRENT_TIMESTAMP OR
+                            editable < CURRENT_TIMESTAMP)", $_POST['plan']) > 1)
 {
     die("REFRESH");
 }
