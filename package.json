@@ -5,7 +5,7 @@
     "type": "git"
   },
   "dependencies": {
-    "jquery": "^3.3.1",
+    "jquery": "^3.5.0",
     "jquery-ui-dist": "^1.11.4",
     "sortablejs": "^1.5.1",
     "bootstrap": "^3.3.7",
